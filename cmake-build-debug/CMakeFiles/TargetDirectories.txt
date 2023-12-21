@@ -1,0 +1,3 @@
+/home/tiago/CLionProjects/proj_aed2/cmake-build-debug/CMakeFiles/proj_aed2.dir
+/home/tiago/CLionProjects/proj_aed2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/tiago/CLionProjects/proj_aed2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
