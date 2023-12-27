@@ -105,6 +105,8 @@ public:
     bool isDAG() const;
     bool dfsIsDAG(Airport* v) const;
 
+    int getNumFlights() const;
+
 };
 
 #endif //PROJ_AED2_GRAPH_H

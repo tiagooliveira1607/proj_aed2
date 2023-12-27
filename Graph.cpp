@@ -324,3 +324,11 @@ bool Graph::dfsIsDAG(Airport *v) const {
     v->setProcessing(false);
     return true;
 }
+
+int Graph::getNumFlights() const {
+    int total = 0;
+    for(auto airport : airportSet){
+        total += airport->getFlights().size();
+    }
+    return total;
+}
