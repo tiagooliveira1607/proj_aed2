@@ -346,3 +346,30 @@ pair<int,int> Graph::airportFlightStats(const std::string &airportCode) const {
     }
     return {flights.size(),airlines.size()};
 }
+
+unordered_map<string,int> Graph::getNumFlightsPerCity() const {
+    unordered_map<string,int> flightsPerCity;
+
+    for(auto airport : airportSet){
+        auto city = airport->getAirportInfo().getCity();
+        const int numFlights = static_cast<int>(airport->getFlights().size());
+
+        flightsPerCity[city] += numFlights;
+    }
+    return flightsPerCity;
+}
+
+unordered_map<string,int> Graph::getNumFlightsPerAirline() const {
+    unordered_map<string,int> flightsPerAirline;
+    for(auto airport : airportSet){
+        auto flights = airport->getFlights();
+
+        for(auto flight : flights){
+            auto airlineCode = flight->getAirlineCode();
+
+            flightsPerAirline[airlineCode]++;
+        }
+    }
+
+    return flightsPerAirline;
+}

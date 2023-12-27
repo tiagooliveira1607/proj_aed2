@@ -6,7 +6,7 @@
 #include <string>
 #include <queue>
 #include <unordered_set>
-
+#include <unordered_map>
 using namespace std;
 
 
@@ -109,6 +109,9 @@ public:
     int getNumFlights() const;
 
     pair<int,int> airportFlightStats(const string& airportCode) const;
+
+    unordered_map<string,int> getNumFlightsPerCity() const;
+    unordered_map<string,int> getNumFlightsPerAirline() const;
 
 };
 
