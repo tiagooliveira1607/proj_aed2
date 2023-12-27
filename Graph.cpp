@@ -373,3 +373,43 @@ unordered_map<string,int> Graph::getNumFlightsPerAirline() const {
 
     return flightsPerAirline;
 }
+
+int Graph::getNumCountriesFlyingTo(const std::string &airportCode) const {
+    auto airport = findAirport(airportCode);
+
+    if(!airport){
+        return -1;
+    }
+
+    unordered_set<string> countries;
+
+    auto flights = airport->getFlights();
+    for(auto flight : flights){
+        auto dest = flight->getDest();
+        auto destCountry = dest->getAirportInfo().getCountry();
+
+        countries.insert(destCountry);
+    }
+
+    return static_cast<int>(countries.size());
+}
+
+int Graph::getNumCitiesFlyingTo(const std::string &airportCode) const {
+    auto airport = findAirport(airportCode);
+
+    if(!airport){
+        return -1;
+    }
+
+    unordered_set<string> cities;
+
+    auto flights = airport->getFlights();
+    for(auto flight : flights){
+        auto dest = flight->getDest();
+        auto destCity = dest->getAirportInfo().getCity();
+
+        cities.insert(destCity);
+    }
+
+    return static_cast<int>(cities.size());
+}

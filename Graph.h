@@ -113,6 +113,8 @@ public:
     unordered_map<string,int> getNumFlightsPerCity() const;
     unordered_map<string,int> getNumFlightsPerAirline() const;
 
+    int getNumCountriesFlyingTo(const string& airportCode) const;
+    int getNumCitiesFlyingTo(const string& airportCode) const;
 };
 
 #endif //PROJ_AED2_GRAPH_H
