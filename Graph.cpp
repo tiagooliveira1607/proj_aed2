@@ -1,6 +1,5 @@
 #include "Graph.h"
 
-
 AirportInfo::AirportInfo(const string &code, const string &name, const string &city, const string &country, const double latitude, const double longitude) :
  code(code), name(name), city(city), country(country), latitude(latitude), longitude(longitude) {}
 
@@ -58,6 +57,38 @@ void Airport::setVisited(bool v) {
     visited = v;
 }
 
+bool Airport::isProcessing() const {
+    return processing;
+}
+
+void Airport::setProcessing(bool p) {
+    this->processing = p;
+}
+
+int Airport::getIndegree() const {
+    return indegree;
+}
+
+void Airport::setIndegree(int indegree) {
+    this->indegree = indegree;
+}
+
+int Airport::getNum() const{
+    return num;
+}
+
+void Airport::setNum(int num) {
+    this->num = num;
+}
+
+int Airport::getLow() const{
+    return low;
+}
+
+void Airport::setLow(int low) {
+    this->low = low;
+}
+
 const vector<Flight*> &Airport::getFlights() const {
     return flights;
 }
@@ -79,8 +110,12 @@ void Airport::removeFlightTo(Airport *d) {
 Flight::Flight(Airport *d, const string &airlineCode) :
 dest(d), airlineCode(airlineCode){}
 
-Airport* Flight::getDest() const {
+const Airport* Flight::getDest() const {
     return dest;
+}
+
+void Flight::setDest(Airport *d) {
+    this->dest = d;
 }
 
 const string &Flight::getAirlineCode() const {
@@ -95,13 +130,23 @@ Airport* Graph::findAirport(const string &airportCode) const {
     for (auto airport : airportSet) {
         if (airport->getAirportInfo().getCode() == airportCode) {
             res = airport;
+            return res;
         }
     }
-    return res;
+    return nullptr;
 }
 
-void Graph::addAirport(const AirportInfo &info) {
+int Graph::getNumAirport() const {
+    return airportSet.size();
+}
+
+bool Graph::addAirport(const AirportInfo &info) {
+    if(findAirport(info.getCode()) != nullptr){
+        return false;
+    }
     airportSet.push_back(new Airport(info));
+    return true;
+
 }
 
 bool Graph::removeAirport(const string &airportCode) {
@@ -119,10 +164,25 @@ bool Graph::removeAirport(const string &airportCode) {
     return false;
 }
 
-void Graph::addFlight(const string &sourcCode, const string &destCode, const string &airlineCode) {
-    Airport* source = findAirport(sourcCode);
-    Airport* dest = findAirport(destCode);
-    source->addFlight(dest, airlineCode);
+bool Graph::addFlight(const string &sourcCode, const string &destCode, const string &airlineCode) {
+    auto source = findAirport(sourcCode);
+    auto dest = findAirport(destCode);
+
+    if(source == nullptr || dest == nullptr){
+        return false;
+    }
+    source->addFlight(dest,airlineCode);
+    return true;
+}
+
+bool Graph::removeFlight(const string &sourcCode, const string &destCode) const {
+    auto source = findAirport(sourcCode);
+    auto dest = findAirport(destCode);
+
+    if(source == nullptr || dest == nullptr){
+        return false;
+    }
+    source->removeFlightTo(dest);
 }
 
 const vector<Airport *> &Graph::getAirportSet() const {
