@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <queue>
+#include <unordered_set>
 
 using namespace std;
 
@@ -90,7 +91,7 @@ class Graph {
 
 public:
     Airport* findAirport(const string& airportCode) const;
-    int getNumAirport() const;
+    int getNumAirports() const;
     bool addAirport(const AirportInfo& info);
     bool removeAirport(const string& airportCode); //return true if airport exists/is successfully removed
     bool addFlight(const string &sourcCode, const string& destCode, const string& airlineCode);
@@ -106,6 +107,8 @@ public:
     bool dfsIsDAG(Airport* v) const;
 
     int getNumFlights() const;
+
+    pair<int,int> airportFlightStats(const string& airportCode) const;
 
 };
 

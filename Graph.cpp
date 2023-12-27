@@ -139,7 +139,7 @@ Airport* Graph::findAirport(const string &airportCode) const {
     return nullptr;
 }
 
-int Graph::getNumAirport() const {
+int Graph::getNumAirports() const {
     return airportSet.size();
 }
 
@@ -331,4 +331,18 @@ int Graph::getNumFlights() const {
         total += airport->getFlights().size();
     }
     return total;
+}
+
+pair<int,int> Graph::airportFlightStats(const std::string &airportCode) const {
+    auto airport = findAirport(airportCode);
+
+    if(airport == nullptr) return {0,0};
+
+    auto flights = airport->getFlights();
+    unordered_set<string> airlines;
+
+    for(auto flight : flights){
+        airlines.insert(flight->getAirlineCode());
+    }
+    return {flights.size(),airlines.size()};
 }
