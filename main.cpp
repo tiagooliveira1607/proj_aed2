@@ -1,6 +1,12 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include "Data.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Data data = Data();
+
+
     return 0;
 }
+
