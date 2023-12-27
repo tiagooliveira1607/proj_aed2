@@ -4,8 +4,10 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <queue>
 
 using namespace std;
+
 
 class Flight;
 
@@ -73,11 +75,11 @@ class Flight {
 public:
     Flight(Airport* d, const string& airlineCode);
 
-    const Airport* getDest() const;
+    Airport* getDest() const;
     void setDest(Airport* d);
 
     const string& getAirlineCode() const;
-    void setAirlineCode();
+    void setAirlineCode(string& airlineCode);
 
     friend class Graph;
     friend class Airport;
@@ -94,6 +96,15 @@ public:
     bool addFlight(const string &sourcCode, const string& destCode, const string& airlineCode);
     bool removeFlight(const string &sourcCode, const string &destCode) const;
     const vector<Airport*>& getAirportSet() const;
+
+    void dfsVisit(Airport* v, vector<Airport*>& result) const;
+    vector<Airport*> dfs() const;
+    vector<Airport*> dfs(const string& sourceCode) const;
+    vector<Airport*> bfs(const string& sourceCode) const;
+    vector<Airport*> topsort() const;
+    bool isDAG() const;
+    bool dfsIsDAG(Airport* v) const;
+
 };
 
 #endif //PROJ_AED2_GRAPH_H

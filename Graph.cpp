@@ -110,7 +110,7 @@ void Airport::removeFlightTo(Airport *d) {
 Flight::Flight(Airport *d, const string &airlineCode) :
 dest(d), airlineCode(airlineCode){}
 
-const Airport* Flight::getDest() const {
+Airport* Flight::getDest() const {
     return dest;
 }
 
@@ -122,6 +122,9 @@ const string &Flight::getAirlineCode() const {
     return airlineCode;
 }
 
+void Flight::setAirlineCode(string& airlineCode) {
+    this->airlineCode = airlineCode;
+}
 
 
 
@@ -187,4 +190,137 @@ bool Graph::removeFlight(const string &sourcCode, const string &destCode) const 
 
 const vector<Airport *> &Graph::getAirportSet() const {
     return airportSet;
+}
+
+void Graph::dfsVisit(Airport *v, vector<Airport *> &result) const {
+    v->setVisited(true);
+    result.push_back(v);
+
+    for(auto& flight : v->getFlights()){
+        Airport* w = flight->getDest();
+        if(!w->isVisited()){
+            dfsVisit(w,result);
+        }
+    }
+}
+
+vector<Airport*> Graph::dfs() const{
+    vector<Airport*> result;
+    for(auto airport : airportSet){
+        airport->setVisited(false);
+    }
+
+    for(auto airport : airportSet){
+        if(!airport->isVisited()){
+            dfsVisit(airport,result);
+        }
+    }
+
+    return result;
+}
+
+vector<Airport*> Graph::dfs(const string& sourceCode) const{
+    vector<Airport*> result;
+    Airport* source = findAirport(sourceCode);
+    if(source != nullptr){
+        for(auto airport : airportSet){
+            airport->setVisited(false);
+        }
+        dfsVisit(source, result);
+    }
+}
+
+vector<Airport*> Graph::bfs(const string& sourceCode) const{
+    vector<Airport*> result;
+    Airport* source = findAirport(sourceCode);
+    if(source != nullptr){
+        for(auto airport : airportSet){
+            airport-> setVisited(false);
+        }
+        queue<Airport*> auxQueue;
+        source->setVisited(true);
+        auxQueue.push(source);
+
+        while(!auxQueue.empty()){
+            Airport* first = auxQueue.front();
+            auxQueue.pop();
+            result.push_back(first);
+
+            for(auto& flight : first->getFlights()){
+                Airport* dest = flight->getDest();
+                if(!dest->isVisited()){
+                    dest->setVisited(true),
+                    auxQueue.push(dest);
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+vector<Airport*> Graph::topsort() const{
+    vector<Airport*> result;
+    queue<Airport*> auxQueue;
+
+    if(!isDAG()) return result;
+
+    for(auto airport : airportSet){
+        airport->setIndegree(0);
+    }
+    for(auto airport : airportSet){
+        for(auto flight : airport->getFlights()){
+            flight->getDest()->setIndegree(flight->getDest()->getIndegree() + 1);
+        }
+    }
+    for(auto airport : airportSet){
+        if(airport->getIndegree() == 0){
+            auxQueue.push(airport);
+        }
+    }
+
+    while(!auxQueue.empty()){
+        Airport* first = auxQueue.front();
+        auxQueue.pop();
+        for(auto flight : first->getFlights()){
+            auto dest = flight->getDest();
+            dest->setIndegree(dest->getIndegree() - 1);
+            if(dest->getIndegree() == 0) auxQueue.push(dest);
+        }
+        result.push_back(first);
+    }
+    return result;
+}
+
+bool Graph::isDAG() const {
+    for(auto airport : airportSet){
+        airport->setVisited(false);
+        airport->setProcessing(false);
+    }
+    for(auto airport : airportSet){
+        if(!airport->isVisited()){
+            if(!dfsIsDAG(airport)){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Graph::dfsIsDAG(Airport *v) const {
+    v->setVisited(true);
+    v->setProcessing(true);
+    for(auto flight : v->getFlights()){
+        auto dest = flight->getDest();
+        if(dest->isProcessing()){
+            return false;
+        }
+        if(!dest->isVisited()){
+            if(!dfsIsDAG(dest)){
+                return false;
+            }
+        }
+    }
+    v->setProcessing(false);
+    return true;
 }
