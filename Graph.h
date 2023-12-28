@@ -118,6 +118,8 @@ public:
 
     int getNumDestinations(const string& airportCode) const;
     void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
+
+    int numReachableDestinations(const string& startAirport, int layouts) const;
 };
 
 #endif //PROJ_AED2_GRAPH_H

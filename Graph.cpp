@@ -444,3 +444,40 @@ void Graph::getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string> 
         }
     }
 }
+
+int Graph::numReachableDestinations(const std::string &startAirportCode, int layouts) const {
+    auto startAirport = findAirport(startAirportCode);
+
+    if(!startAirport) return -1;
+
+    int count = 0;
+    unordered_set<string> visitedDestinations;
+
+    queue<pair<Airport*,int>> bfsQ;
+    bfsQ.push({startAirport,0});
+
+    while(!bfsQ.empty()){
+        auto currentPair = bfsQ.front();
+        bfsQ.pop();
+
+        auto currentAirport = currentPair.first;
+        int stops = currentPair.second;
+
+        if(stops > layouts) break;
+
+        visitedDestinations.insert(currentAirport->getAirportInfo().getCode());
+
+        for(auto flight : currentAirport->getFlights()){
+            auto nextAirport = flight->getDest();
+            string nextAirportCode = nextAirport->getAirportInfo().getCode();
+
+            if(visitedDestinations.find(nextAirportCode) == visitedDestinations.end()) {
+
+                bfsQ.push({nextAirport, stops + 1});
+                visitedDestinations.insert(nextAirportCode);
+                count++;
+            }
+        }
+    }
+    return count;
+}
