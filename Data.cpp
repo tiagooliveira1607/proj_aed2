@@ -3,8 +3,16 @@
 #include <sstream>
 #include <iostream>
 
+Graph Data::graph;
+
+unordered_map<string, Airline> Data::airlines;
+
 
 Data::Data() {
+
+    graph = Graph();
+    airlines = {};
+
     string airportsFilepath = "../dataset/airports.csv";
     string flightsFilepath = "../dataset/flights.csv";
     string airlinesFilepath = "../dataset/airlines.csv";
@@ -99,4 +107,8 @@ void Data::readAirlines(const string &airlinesFilePath){
         airlines.insert(make_pair(code, Airline(name, callsign, country)));
     }
     airlinesFile.close();
+}
+
+Graph Data::getGraph() {
+    return graph;
 }

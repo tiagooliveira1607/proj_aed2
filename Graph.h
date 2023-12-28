@@ -91,6 +91,7 @@ class Graph {
     vector<Airport*> airportSet;
 
 public:
+    Graph();
     Airport* findAirport(const string& airportCode) const;
     int getNumAirports() const;
     bool addAirport(const AirportInfo& info);

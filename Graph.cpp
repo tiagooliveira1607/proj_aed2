@@ -127,6 +127,9 @@ void Flight::setAirlineCode(string& airlineCode) {
 }
 
 
+Graph::Graph() {
+    airportSet = vector<Airport*>();
+}
 
 Airport* Graph::findAirport(const string &airportCode) const {
     Airport* res;
@@ -186,6 +189,7 @@ bool Graph::removeFlight(const string &sourcCode, const string &destCode) const 
         return false;
     }
     source->removeFlightTo(dest);
+    return true;
 }
 
 const vector<Airport *> &Graph::getAirportSet() const {
