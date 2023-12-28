@@ -8,7 +8,7 @@
 
 
 class Data {
-
+private:
     Graph graph; // Graph structure with airports as vertices and flights as edges
     unordered_map<string, Airline> airlines; // Map to store airline details (Airline struct/class needed)
 
@@ -19,7 +19,6 @@ public:
     void readAirports(const string& airportsFilePath);
     void readAirlines(const string& airlinesFilePath);
     void readFlights(const string& flightsFilePath);
-
 
 };
 

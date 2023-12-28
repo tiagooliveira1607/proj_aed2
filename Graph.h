@@ -115,6 +115,9 @@ public:
 
     int getNumCountriesFlyingTo(const string& airportCode) const;
     int getNumCitiesFlyingTo(const string& airportCode) const;
+
+    int getNumDestinations(const string& airportCode) const;
+    void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
 };
 
 #endif //PROJ_AED2_GRAPH_H

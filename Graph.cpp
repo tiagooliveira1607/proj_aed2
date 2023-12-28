@@ -413,3 +413,34 @@ int Graph::getNumCitiesFlyingTo(const std::string &airportCode) const {
 
     return static_cast<int>(cities.size());
 }
+
+int Graph::getNumDestinations(const std::string &airportCode) const {
+    auto source = findAirport(airportCode);
+
+    if(!source) return -1;
+
+    unordered_set<string> destinations;
+
+    getNumDestinationsDFS(source,destinations);
+
+    for(auto airport : airportSet){
+        airport->setVisited(false);
+    }
+
+    return static_cast<int>(destinations.size());
+}
+
+void Graph::getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string> &destinations) const {
+    sourceAirport->setVisited(true);
+
+    for(auto flight : sourceAirport->getFlights()){
+        auto destAirport = flight->getDest();
+
+        if(!destAirport->isVisited()){
+            auto destInfo = destAirport->getAirportInfo();
+            destinations.insert(destInfo.getCode());
+
+            getNumDestinationsDFS(destAirport,destinations);
+        }
+    }
+}
