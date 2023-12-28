@@ -9,4 +9,6 @@ add_executable(proj_aed2 main.cpp
         Airline.cpp
         Airline.h
         Graph.h
-        Graph.cpp)
+        Graph.cpp
+        Menu.cpp
+        Menu.h)

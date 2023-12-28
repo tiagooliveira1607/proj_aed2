@@ -204,6 +204,7 @@ void Graph::dfsVisit(Airport *v, vector<Airport *> &result) const {
     }
 }
 
+
 vector<Airport*> Graph::dfs() const{
     vector<Airport*> result;
     for(auto airport : airportSet){
@@ -228,6 +229,7 @@ vector<Airport*> Graph::dfs(const string& sourceCode) const{
         }
         dfsVisit(source, result);
     }
+    return result;
 }
 
 vector<Airport*> Graph::bfs(const string& sourceCode) const{
@@ -480,4 +482,164 @@ int Graph::numReachableDestinations(const std::string &startAirportCode, int lay
         }
     }
     return count;
+}
+
+// 3)vii
+
+void Graph::dfsVisit3_7(Airport *v, vector<Airport *> &result, int numStops, int maxStops, vector<Airport *>& currentPath) const{
+    v->setVisited(true);
+    currentPath.push_back(v);
+
+    for(auto& flight : v->getFlights()){
+        Airport* w = flight->getDest();
+        if(!w->isVisited()){
+            dfsVisit3_7(w,result,numStops+1,maxStops,currentPath);
+        }
+    }
+
+    if (currentPath.size() > 1 && numStops > 0) {
+        // Store the route and its number of stops
+        if (numStops == maxStops) {
+            result = currentPath;
+        } else if (numStops > maxStops) {
+            result.clear();
+            result = currentPath;
+            maxStops = numStops;
+        }
+    }
+
+    currentPath.clear();
+}
+
+vector<Airport*> Graph::dfs3_7(const string& sourceCode) const{
+    vector<Airport*> result;
+    int maxStops = 0;
+    vector<Airport *> currentPath = vector<Airport*>();
+    Airport* source = findAirport(sourceCode);
+    if(source != nullptr){
+        for(auto airport : airportSet){
+            airport->setVisited(false);
+        }
+        dfsVisit3_7(source, result, 0,maxStops, currentPath);
+    }
+    return result;
+}
+
+//3)viii
+
+//Create a struct to store airport with number of flights
+struct AirportWithFlights {
+    Airport* airport;
+    int flightsCount;
+
+    AirportWithFlights(Airport* ap, int count) : airport(ap), flightsCount(count) {}
+};
+
+
+
+bool compareByFlights(const AirportWithFlights& a, const AirportWithFlights& b) {
+    return a.flightsCount > b.flightsCount; // Sort in descending order
+}
+
+vector<Airport*> Graph::topAirportsByFlights(int k) {
+    vector<AirportWithFlights> airportsWithFlights;
+
+    for (auto airport : airportSet) {
+        int flightsCount = airport->getFlights().size();
+        airportsWithFlights.push_back(AirportWithFlights(airport, flightsCount));
+    }
+
+    // Sort the airports by the number of flights
+    sort(airportsWithFlights.begin(), airportsWithFlights.end(), compareByFlights);
+
+    vector<Airport*> topAirports;
+    for (int i = 0; i < k && i < airportsWithFlights.size(); ++i) {
+        topAirports.push_back(airportsWithFlights[i].airport);
+    }
+
+    return topAirports;
+}
+
+
+//3)ix
+
+Graph Graph::copyGraph() const {
+    Graph copiedGraph;
+
+    // Create copies of airports
+    for (Airport* originalAirport : airportSet) {
+        AirportInfo info = originalAirport->getAirportInfo();
+        copiedGraph.addAirport(info);
+    }
+
+    // Copy flights between airports
+    for (Airport* originalAirport : airportSet) {
+        Airport* copiedAirport = copiedGraph.findAirport(originalAirport->getAirportInfo().getCode());
+        for (Flight* flight : originalAirport->getFlights()) {
+            copiedGraph.addFlight(
+                    copiedAirport->getAirportInfo().getCode(),
+                    flight->getDest()->getAirportInfo().getCode(),
+                    flight->getAirlineCode()
+            );
+        }
+    }
+    return copiedGraph;
+}
+
+
+vector<Airport*> Graph::identifyEssentialAirports() const {
+    vector<Airport*> essentialAirports;
+    Graph graph = copyGraph();
+
+    // Iterate through each airport in the network
+    for (Airport* currentAirport : graph.airportSet) {
+        // Temporarily remove current airport from the network
+        graph.removeAirport(currentAirport->getAirportInfo().getCode());
+
+        // Check if any areas become unreachable after removing the airport
+        bool allReachable = checkAllAreasReachable(graph);
+
+        // If some areas are unreachable, mark the airport as essential
+        if (!allReachable) {
+            essentialAirports.push_back(currentAirport);
+        }
+
+        // Re-add the removed airport back to the network
+        graph.addAirport(currentAirport->getAirportInfo());
+    }
+
+    return essentialAirports;
+}
+
+bool Graph::checkAllAreasReachable(const Graph& graph) const {
+    vector<Airport*> allAirports = graph.getAirportSet();
+    graph.dfs3_9();
+
+    // Check if all airports are visited
+    for (Airport* airport : allAirports) {
+        if (!airport->isVisited()) {
+            return false; // There's an unvisited airport, so not all areas are reachable
+        }
+    }
+
+    return true; // All airports have been visited, so all areas are reachable
+}
+
+void Graph::dfs3_9() const {
+    Airport* source = airportSet[0];
+    for(auto airport : airportSet){
+        airport->setVisited(false);
+    }
+    dfsVisit3_9(source);
+    }
+
+void Graph::dfsVisit3_9(Airport *v) const {
+    v->setVisited(true);
+
+    for(auto& flight : v->getFlights()){
+        Airport* w = flight->getDest();
+        if(!w->isVisited()){
+            dfsVisit3_9(w);
+        }
+    }
 }
