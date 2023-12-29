@@ -1,6 +1,7 @@
 #ifndef PROJ_AED2_GRAPH_H
 #define PROJ_AED2_GRAPH_H
 
+#include <iostream>
 #include <vector>
 #include <list>
 #include <string>
@@ -120,6 +121,8 @@ public:
     void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
 
     int numReachableDestinations(const string& startAirport, int layouts) const;
+
+    [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
 };
 
 #endif //PROJ_AED2_GRAPH_H

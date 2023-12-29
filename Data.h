@@ -9,11 +9,12 @@
 
 class Data {
 private:
-    Graph graph; // Graph structure with airports as vertices and flights as edges
+     // Graph structure with airports as vertices and flights as edges
     unordered_map<string, Airline> airlines; // Map to store airline details (Airline struct/class needed)
 
 public:
     Data();
+    Graph graph;
 
     // Methods to populate data structures from CSV files
     void readAirports(const string& airportsFilePath);

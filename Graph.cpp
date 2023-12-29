@@ -129,11 +129,9 @@ void Flight::setAirlineCode(string& airlineCode) {
 
 
 Airport* Graph::findAirport(const string &airportCode) const {
-    Airport* res;
     for (auto airport : airportSet) {
         if (airport->getAirportInfo().getCode() == airportCode) {
-            res = airport;
-            return res;
+            return airport;
         }
     }
     return nullptr;
@@ -149,7 +147,6 @@ bool Graph::addAirport(const AirportInfo &info) {
     }
     airportSet.push_back(new Airport(info));
     return true;
-
 }
 
 bool Graph::removeAirport(const string &airportCode) {
@@ -333,7 +330,7 @@ int Graph::getNumFlights() const {
     return total;
 }
 
-pair<int,int> Graph::airportFlightStats(const std::string &airportCode) const {
+pair<int,int> Graph::airportFlightStats(const string &airportCode) const {
     auto airport = findAirport(airportCode);
 
     if(airport == nullptr) return {0,0};
@@ -374,7 +371,7 @@ unordered_map<string,int> Graph::getNumFlightsPerAirline() const {
     return flightsPerAirline;
 }
 
-int Graph::getNumCountriesFlyingTo(const std::string &airportCode) const {
+int Graph::getNumCountriesFlyingTo(const string &airportCode) const {
     auto airport = findAirport(airportCode);
 
     if(!airport){
@@ -394,7 +391,7 @@ int Graph::getNumCountriesFlyingTo(const std::string &airportCode) const {
     return static_cast<int>(countries.size());
 }
 
-int Graph::getNumCitiesFlyingTo(const std::string &airportCode) const {
+int Graph::getNumCitiesFlyingTo(const string &airportCode) const {
     auto airport = findAirport(airportCode);
 
     if(!airport){
@@ -414,7 +411,7 @@ int Graph::getNumCitiesFlyingTo(const std::string &airportCode) const {
     return static_cast<int>(cities.size());
 }
 
-int Graph::getNumDestinations(const std::string &airportCode) const {
+int Graph::getNumDestinations(const string &airportCode) const {
     auto source = findAirport(airportCode);
 
     if(!source) return -1;
@@ -445,7 +442,7 @@ void Graph::getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string> 
     }
 }
 
-int Graph::numReachableDestinations(const std::string &startAirportCode, int layouts) const {
+int Graph::numReachableDestinations(const string &startAirportCode, int layouts) const {
     auto startAirport = findAirport(startAirportCode);
 
     if(!startAirport) return -1;
@@ -480,4 +477,39 @@ int Graph::numReachableDestinations(const std::string &startAirportCode, int lay
         }
     }
     return count;
+}
+
+
+vector<Flight *> Graph::getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const {
+    Airport* sourceAirport = findAirport(sourceCode);
+    Airport* destinationAirport = findAirport(destinationCode);
+
+    if (!sourceAirport || !destinationAirport) {
+        return {};
+    }
+
+    unordered_map<Airport*, vector<Flight*>> bestFlights;
+    queue<Airport*> q;
+    q.push(sourceAirport);
+    bestFlights[sourceAirport] = vector<Flight*>();
+
+    while (!q.empty()) {
+        Airport* currentAirport = q.front();
+        q.pop();
+
+        for (Flight* flight : currentAirport->getFlights()) {
+            Airport* nextAirport = flight->getDest();
+
+            if (bestFlights.find(nextAirport) == bestFlights.end()) {
+                bestFlights[nextAirport] = bestFlights[currentAirport];
+                bestFlights[nextAirport].push_back(flight);
+                q.push(nextAirport);
+            }
+        }
+    }
+    // Retrieve the best flights for the destination airport
+    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
+
+
+    return bestFlightsToDestination;
 }
