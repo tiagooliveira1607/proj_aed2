@@ -61,7 +61,7 @@ void Menu::display() {
     }
 }
 
-void Menu::getUserChoice(int choice) {
+void Menu::getUserChoice(int& choice) {
     cout << "Enter your choice: ";
     cin >> choice;
 }
@@ -71,10 +71,10 @@ void Menu::getUserChoice(int choice) {
 void Menu::processConsultationChoice(int choice) {
     switch (choice) {
         case 1:
-            cout << Data::getGraph().getNumAirports() << endl;
+            cout << Data::getNumAirports() << endl;
             break;
         case 2:
-            cout << Data::getGraph().getNumFlights() << endl;
+            cout << Data::getNumFlights() << endl;
             break;
         case 3:
             cout << "Exiting..." << endl;

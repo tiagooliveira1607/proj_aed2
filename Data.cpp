@@ -109,6 +109,10 @@ void Data::readAirlines(const string &airlinesFilePath){
     airlinesFile.close();
 }
 
-Graph Data::getGraph() {
-    return graph;
+int Data::getNumAirports() {
+    return graph.getNumAirports();
+}
+
+int Data::getNumFlights() {
+    return graph.getNumFlights();
 }

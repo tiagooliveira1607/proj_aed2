@@ -10,11 +10,11 @@ class Menu {
 public:
     Menu();
 
-    void display();
-    void displayMainMenu();
-    void displayConsultationMenu();
-    void getUserChoice(int choice);
-    void processConsultationChoice(int choice);
+    static void display();
+    static void displayMainMenu();
+    static void displayConsultationMenu();
+    static void getUserChoice(int& choice);
+    static void processConsultationChoice(int choice);
 };
 
 

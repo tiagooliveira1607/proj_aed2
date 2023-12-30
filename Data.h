@@ -20,7 +20,9 @@ public:
     static void readAirlines(const string& airlinesFilePath);
     static void readFlights(const string& flightsFilePath);
 
-    static Graph getGraph();
+    static int getNumAirports();
+
+    static int getNumFlights();
 
 };
 
