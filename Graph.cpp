@@ -681,11 +681,10 @@ vector<Flight *> Graph::getBestFlightOption_AirportCode(const string& sourceCode
     return bestFlightsToDestination;
 }
 
-vector<Flight*> Graph::getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const {
+vector<Flight *> Graph::getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const{
     Airport* sourceAirport = nullptr;
     Airport* destinationAirport = nullptr;
 
-    // Search for source airport by name
     for (Airport* airport : airportSet) {
         if (airport->getAirportInfo().getName() == sourceName) {
             sourceAirport = airport;
@@ -693,7 +692,6 @@ vector<Flight*> Graph::getBestFlightOption_AirportName(const string& sourceName,
         }
     }
 
-    // Search for destination airport by name
     for (Airport* airport : airportSet) {
         if (airport->getAirportInfo().getName() == destinationName) {
             destinationAirport = airport;
@@ -701,56 +699,6 @@ vector<Flight*> Graph::getBestFlightOption_AirportName(const string& sourceName,
         }
     }
 
-    if (!sourceAirport || !destinationAirport) {
-        return {};
-    }
-
-    unordered_map<Airport*, vector<Flight*>> bestFlights;
-    queue<Airport*> q;
-    q.push(sourceAirport);
-    bestFlights[sourceAirport] = vector<Flight*>();
-
-    while (!q.empty()) {
-        Airport* currentAirport = q.front();
-        q.pop();
-
-        for (Flight* flight : currentAirport->getFlights()) {
-            Airport* nextAirport = flight->getDest();
-
-            if (bestFlights.find(nextAirport) == bestFlights.end()) {
-                bestFlights[nextAirport] = bestFlights[currentAirport];
-                bestFlights[nextAirport].push_back(flight);
-                q.push(nextAirport);
-            }
-        }
-    }
-    // Retrieve the best flights for the destination airport
-    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
-
-    return bestFlightsToDestination;
-}
-
-vector<Flight*> Graph::getBestFlightOption_AirportName2(const string& sourceName, const string& destinationName) const {
-    Airport* sourceAirport = nullptr;
-    Airport* destinationAirport = nullptr;
-
-    // Search for source airport by name using BFS
-    vector<Airport*> airportsVisited = bfs(sourceName);
-    for (Airport* airport : airportsVisited) {
-        if (airport->getAirportInfo().getName() == sourceName) {
-            sourceAirport = airport;
-            break;
-        }
-    }
-
-    // Search for destination airport by name using BFS
-    airportsVisited = bfs(destinationName);
-    for (Airport* airport : airportsVisited) {
-        if (airport->getAirportInfo().getName() == destinationName) {
-            destinationAirport = airport;
-            break;
-        }
-    }
 
     if (!sourceAirport || !destinationAirport) {
         return {};
