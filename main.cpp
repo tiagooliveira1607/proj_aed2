@@ -8,6 +8,8 @@ using namespace std;
 
 int main() {
     Data data = Data();
+    Graph g = data.graph;
+
 
 
     return 0;
