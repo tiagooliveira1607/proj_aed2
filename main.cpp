@@ -3,12 +3,15 @@
 #include <sstream>
 #include <iostream>
 #include "Data.h"
+#include "Menu.h"
 
 using namespace std;
 
 int main() {
     Data data = Data();
-    Graph g = data.graph;
+
+    Menu menu = Menu();   // Create an instance of the Menu class
+
 
 
 

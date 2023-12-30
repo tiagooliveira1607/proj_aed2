@@ -8,6 +8,7 @@
 #include <queue>
 #include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 using namespace std;
 
 
@@ -91,6 +92,7 @@ class Graph {
     vector<Airport*> airportSet;
 
 public:
+    Graph();
     Airport* findAirport(const string& airportCode) const;
     int getNumAirports() const;
     bool addAirport(const AirportInfo& info);
@@ -98,10 +100,15 @@ public:
     bool addFlight(const string &sourcCode, const string& destCode, const string& airlineCode);
     bool removeFlight(const string &sourcCode, const string &destCode) const;
     const vector<Airport*>& getAirportSet() const;
+    Graph copyGraph() const;
 
     void dfsVisit(Airport* v, vector<Airport*>& result) const;
+    void dfsVisit3_7(Airport *v, vector<Airport *> &result, int numStops, int maxStops, vector<Airport *>& currentPath) const;
+    void dfsVisit3_9(Airport* v) const;
     vector<Airport*> dfs() const;
     vector<Airport*> dfs(const string& sourceCode) const;
+    vector<Airport*> dfs3_7(const string& sourceCode) const;
+    void dfs3_9() const;
     vector<Airport*> bfs(const string& sourceCode) const;
     vector<Airport*> topsort() const;
     bool isDAG() const;
@@ -121,6 +128,12 @@ public:
     void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
 
     int numReachableDestinations(const string& startAirport, int layouts) const;
+
+
+    vector<Airport*> topAirportsByFlights(int k);
+
+    vector<Airport*> identifyEssentialAirports() const;
+    bool checkAllAreasReachable(const Graph& graph) const;
 
     [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
