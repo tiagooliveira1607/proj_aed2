@@ -9,8 +9,10 @@
 
 class Data {
 private:
+
     static Graph graph; // Graph structure with airports as vertices and flights as edges
     static unordered_map<string, Airline> airlines; // Map to store airline details (Airline struct/class needed)
+
 
 public:
     Data();

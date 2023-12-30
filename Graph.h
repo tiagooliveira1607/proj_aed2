@@ -1,6 +1,7 @@
 #ifndef PROJ_AED2_GRAPH_H
 #define PROJ_AED2_GRAPH_H
 
+#include <iostream>
 #include <vector>
 #include <list>
 #include <string>
@@ -128,10 +129,13 @@ public:
 
     int numReachableDestinations(const string& startAirport, int layouts) const;
 
+
     vector<Airport*> topAirportsByFlights(int k);
 
     vector<Airport*> identifyEssentialAirports() const;
     bool checkAllAreasReachable(const Graph& graph) const;
+
+    [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
 };
 
 #endif //PROJ_AED2_GRAPH_H
