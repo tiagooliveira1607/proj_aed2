@@ -137,7 +137,8 @@ public:
 
     [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
+    vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
 
-};
+    };
 
 #endif //PROJ_AED2_GRAPH_H

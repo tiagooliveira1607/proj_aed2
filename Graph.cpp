@@ -729,3 +729,55 @@ vector<Flight *> Graph::getBestFlightOption_AirportName(const string& sourceName
 
     return bestFlightsToDestination;
 }
+
+vector<vector<Flight*>> Graph::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const{
+    vector<vector<Flight*>> bestFlights;
+
+    // Find all airports in the source city
+    vector<Airport*> sourceAirports;
+    for (Airport* airport : airportSet) {
+        if (airport->getAirportInfo().getCity() == sourceCity) {
+            sourceAirports.push_back(airport);
+        }
+    }
+
+    // Find all airports in the destination city
+    vector<Airport*> destinationAirports;
+    for (Airport* airport : airportSet) {
+        if (airport->getAirportInfo().getCity() == destinationCity) {
+            destinationAirports.push_back(airport);
+        }
+    }
+
+    for (Airport* sourceAirport : sourceAirports) {
+        for (Airport* destinationAirport : destinationAirports) {
+            if (sourceAirport != destinationAirport) {
+                // Use BFS to find the best flights between the current pair
+                unordered_map<Airport*, vector<Flight*>> bestFlightsMap;
+                queue<Airport*> q;
+                q.push(sourceAirport);
+                bestFlightsMap[sourceAirport] = vector<Flight*>();
+
+                while (!q.empty()) {
+                    Airport* currentAirport = q.front();
+                    q.pop();
+
+                    for (Flight* flight : currentAirport->getFlights()) {
+                        Airport* nextAirport = flight->getDest();
+
+                        if (bestFlightsMap.find(nextAirport) == bestFlightsMap.end()) {
+                            bestFlightsMap[nextAirport] = bestFlightsMap[currentAirport];
+                            bestFlightsMap[nextAirport].push_back(flight);
+                            q.push(nextAirport);
+                        }
+                    }
+                }
+
+                vector<Flight*> bestFlightsToDestination = bestFlightsMap[destinationAirport];
+                bestFlights.push_back(bestFlightsToDestination);
+            }
+        }
+    }
+
+    return bestFlights;
+}
