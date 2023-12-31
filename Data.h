@@ -26,6 +26,10 @@ public:
 
     static int getNumFlights();
 
+    static bool isValidAirportCode(const string& airportCode);
+
+    static pair<int,int> airportFlightStats(const string& airportCode) ;
+
 };
 
 

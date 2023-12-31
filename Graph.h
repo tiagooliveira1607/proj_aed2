@@ -116,7 +116,6 @@ public:
 
     int getNumFlights() const;
 
-    pair<int,int> airportFlightStats(const string& airportCode) const;
 
     unordered_map<string,int> getNumFlightsPerCity() const;
     unordered_map<string,int> getNumFlightsPerAirline() const;
@@ -138,6 +137,8 @@ public:
     [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
     vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
+
+    vector<string> getListOfAirportCodes() const;
 
     };
 

@@ -8,9 +8,8 @@
 
 class Menu {
 public:
-    Menu();
 
-    static void display();
+    static void run();
     static void displayMainMenu();
     static void displayConsultationMenu();
     static void getUserChoice(int& choice);

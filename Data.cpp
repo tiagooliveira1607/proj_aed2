@@ -116,3 +116,27 @@ int Data::getNumAirports() {
 int Data::getNumFlights() {
     return graph.getNumFlights();
 }
+
+
+bool Data::isValidAirportCode(const string& airportCode) {
+    // Assume you have a vector or another container containing valid airport codes/names
+    vector<string> validAirportCodes = graph.getListOfAirportCodes(); // Sample list
+
+    // Check if the entered code is present in the list
+    return (find(validAirportCodes.begin(), validAirportCodes.end(), airportCode) != validAirportCodes.end());
+}
+
+pair<int,int> Data::airportFlightStats(const string &airportCode) {
+    auto airport = graph.findAirport(airportCode);
+
+    if(airport == nullptr) return {0,0};
+
+    auto flights = airport->getFlights();
+
+    unordered_set<string> airlines;
+
+    for(auto flight : flights){
+        airlines.insert(flight->getAirlineCode());
+    }
+    return {flights.size(), airlines.size()};
+}

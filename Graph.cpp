@@ -336,19 +336,6 @@ int Graph::getNumFlights() const {
     return total;
 }
 
-pair<int,int> Graph::airportFlightStats(const string &airportCode) const {
-    auto airport = findAirport(airportCode);
-
-    if(airport == nullptr) return {0,0};
-
-    auto flights = airport->getFlights();
-    unordered_set<string> airlines;
-
-    for(auto flight : flights){
-        airlines.insert(flight->getAirlineCode());
-    }
-    return {flights.size(),airlines.size()};
-}
 
 unordered_map<string,int> Graph::getNumFlightsPerCity() const {
     unordered_map<string,int> flightsPerCity;
@@ -780,4 +767,14 @@ vector<vector<Flight*>> Graph::getBestFlightOption_CityName(const string& source
     }
 
     return bestFlights;
+}
+
+vector<string> Graph::getListOfAirportCodes() const {
+    vector<string> res = {};
+
+    for (Airport* airport: airportSet) {
+        res.push_back(airport->getAirportInfo().getCode());
+    }
+
+    return res;
 }

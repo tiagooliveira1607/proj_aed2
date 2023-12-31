@@ -1,16 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include "Data.h"
-#include "Menu.h"
+#include "Application.h"
 
 using namespace std;
 
 int main() {
-    Data data = Data();
-    Menu menu = Menu();   // Create an instance of the Menu class
-
+    Application::run();
     return 0;
 }
 
