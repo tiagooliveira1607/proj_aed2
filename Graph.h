@@ -110,23 +110,14 @@ public:
     vector<Airport*> dfs3_7(const string& sourceCode) const;
     void dfs3_9() const;
     vector<Airport*> bfs(const string& sourceCode) const;
+    /*
     vector<Airport*> topsort() const;
     bool isDAG() const;
     bool dfsIsDAG(Airport* v) const;
+     */
 
-    int getNumFlights() const;
+    vector<Airport*> getAirportsInCity(string& city);
 
-
-    unordered_map<string,int> getNumFlightsPerCity() const;
-    unordered_map<string,int> getNumFlightsPerAirline() const;
-
-    int getNumCountriesFlyingTo(const string& airportCode) const;
-    int getNumCitiesFlyingTo(const string& airportCode) const;
-
-    int getNumDestinations(const string& airportCode) const;
-    void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
-
-    int numReachableDestinations(const string& startAirport, int layouts) const;
 
 
     vector<Airport*> topAirportsByFlights(int k);

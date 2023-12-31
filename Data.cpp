@@ -1,7 +1,5 @@
 #include "Data.h"
-#include <fstream>
-#include <sstream>
-#include <iostream>
+
 
 Graph Data::graph;
 
@@ -110,20 +108,16 @@ void Data::readAirlines(const string &airlinesFilePath){
 }
 
 int Data::getNumAirports() {
+
     return graph.getNumAirports();
 }
 
 int Data::getNumFlights() {
-    return graph.getNumFlights();
-}
-
-
-bool Data::isValidAirportCode(const string& airportCode) {
-    // Assume you have a vector or another container containing valid airport codes/names
-    vector<string> validAirportCodes = graph.getListOfAirportCodes(); // Sample list
-
-    // Check if the entered code is present in the list
-    return (find(validAirportCodes.begin(), validAirportCodes.end(), airportCode) != validAirportCodes.end());
+    int total = 0;
+    for(auto airport : graph.getAirportSet()){
+        total += airport->getFlights().size();
+    }
+    return total;
 }
 
 pair<int,int> Data::airportFlightStats(const string &airportCode) {
@@ -140,3 +134,153 @@ pair<int,int> Data::airportFlightStats(const string &airportCode) {
     }
     return {flights.size(), airlines.size()};
 }
+
+unordered_map<string,int> Data::getNumFlightsPerCity() {
+    unordered_map<string,int> flightsPerCity;
+
+    for(auto airport : graph.getAirportSet()){
+        auto city = airport->getAirportInfo().getCity();
+        const int numFlights = static_cast<int>(airport->getFlights().size());
+
+        flightsPerCity[city] += numFlights;
+    }
+    return flightsPerCity;
+}
+
+unordered_map<string,int> Data::getNumFlightsPerAirline() {
+    unordered_map<string,int> flightsPerAirline;
+    for(auto airport : graph.getAirportSet()){
+        auto flights = airport->getFlights();
+
+        for(auto flight : flights){
+            auto airlineCode = flight->getAirlineCode();
+
+            flightsPerAirline[airlineCode]++;
+        }
+    }
+
+    return flightsPerAirline;
+}
+
+
+
+int Data::getNumCountriesFlyingToAirport(string &airportCode) {
+    auto airport = graph.findAirport(airportCode);
+
+    if(!airport){
+        return -1;
+    }
+
+    unordered_set<string> countries;
+
+    auto flights = airport->getFlights();
+    for(auto flight : flights){
+        auto dest = flight->getDest();
+        auto destCountry = dest->getAirportInfo().getCountry();
+
+        countries.insert(destCountry);
+    }
+
+    return static_cast<int>(countries.size());
+}
+
+int Data::getNumCountriesFlyingToCity(string &city) {
+    vector<Airport*> airports = graph.getAirportsInCity(city);
+
+
+
+    unordered_set<string> countries;
+    for (Airport* airport : airports ) {
+        auto flights = airport->getFlights();
+        for (auto flight: flights) {
+            auto dest = flight->getDest();
+            auto destCountry = dest->getAirportInfo().getCountry();
+
+            countries.insert(destCountry);
+        }
+    }
+
+    return static_cast<int>(countries.size());
+}
+
+
+int Data::getNumAirportsFromAirport(const string &airportCode){
+    auto source = graph.findAirport(airportCode);
+
+    if(!source) return -1;
+
+    unordered_set<string> destinations;
+
+    for(auto flight : source->getFlights()){
+        destinations.insert(flight->getDest()->getAirportInfo().getCode());
+    }
+
+    return static_cast<int>(destinations.size());
+}
+
+int Data::getNumCitiesFromAirport(const string &airportCode) {
+    auto source = graph.findAirport(airportCode);
+
+    if(!source) return -1;
+
+    unordered_set<string> destinations;
+
+    for(auto flight : source->getFlights()){
+        destinations.insert(flight->getDest()->getAirportInfo().getCity());
+    }
+
+    return static_cast<int>(destinations.size());
+}
+
+int Data::getNumCountriesFromAirport(const string &airportCode) {
+    auto source = graph.findAirport(airportCode);
+
+    if(!source) return -1;
+
+    unordered_set<string> destinations;
+
+    for(auto flight : source->getFlights()){
+        destinations.insert(flight->getDest()->getAirportInfo().getCountry());
+    }
+
+    return static_cast<int>(destinations.size());
+}
+
+
+int Data::numReachableDestinations(const string &startAirportCode, int layouts) const {
+    auto startAirport = graph.findAirport(startAirportCode);
+
+    if(!startAirport) return -1;
+
+    int count = 0;
+    unordered_set<string> visitedDestinations;
+
+    queue<pair<Airport*,int>> bfsQ;
+    bfsQ.push({startAirport,0});
+
+    while(!bfsQ.empty()){
+        auto currentPair = bfsQ.front();
+        bfsQ.pop();
+
+        auto currentAirport = currentPair.first;
+        int stops = currentPair.second;
+
+        if(stops > layouts) break;
+
+        visitedDestinations.insert(currentAirport->getAirportInfo().getCode());
+
+        for(auto flight : currentAirport->getFlights()){
+            auto nextAirport = flight->getDest();
+            string nextAirportCode = nextAirport->getAirportInfo().getCode();
+
+            if(visitedDestinations.find(nextAirportCode) == visitedDestinations.end()) {
+
+                bfsQ.push({nextAirport, stops + 1});
+                visitedDestinations.insert(nextAirportCode);
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
