@@ -40,6 +40,12 @@ void Menu::run() {
                             processConsultationChoice(7);
                             break;
                         case 8:
+                            processConsultationChoice(8);
+                            break;
+                        case 9:
+                            processConsultationChoice(9);
+                            break;
+                        case 10:
                             cout << "Returning to Main Menu..." << endl;
                             break;
                         default:
@@ -70,14 +76,18 @@ void Menu::displayMainMenu() {
 }
 
 void Menu::displayConsultationMenu() {
-    cout << "===== Consultation Menu =====" << endl;
+    cout << "========== Consultation Menu ==========" << endl;
     cout << "1. Global number of airports/flights" << endl;
-    cout << "3. Number of flights going out of an airport" << endl;
-    cout << "4. Number of flights per city/airline" << endl;
-    cout << "5. Number of different countries that a given Airport/City flies to." << endl;
-    cout << "6. Number of destinations of an Airport." << endl;
-    cout << "7. Number of reachable destinations from a given airport in a maximum number of X stops" << endl;
-    cout << "=============================" << endl << endl;
+    cout << "2. Number of flights going out of an airport" << endl;
+    cout << "3. Number of flights per city/airline" << endl;
+    cout << "4. Number of different countries that a given Airport/City flies to." << endl;
+    cout << "5. Number of destinations of an Airport." << endl;
+    cout << "6. Number of reachable destinations from a given airport in a maximum number of X stops" << endl;
+    cout << "7. Pair(s) of source and destination Airport(s) that represent the longest trips possible." << endl;
+    cout << "8. Top k Airports with the greatest air traffic capacity" << endl;
+    cout << "9. Essential Airports" << endl;
+    cout << "10. Return" << endl;
+    cout << "========================================" << endl << endl;
 }
 
 
@@ -91,13 +101,13 @@ void Menu::getUserChoice(int& choice) {
 
 void Menu::processConsultationChoice(int choice) {
     switch (choice) {
-        case 1:
+        case 1: {
             int globalChoice;
             displayGlobalNumMenu();
             getUserChoice(globalChoice);
             processGlobalNum(globalChoice);
+            break;}
 
-            break;
         case 2: {
             string airportCode;
             while (true) {
@@ -113,14 +123,14 @@ void Menu::processConsultationChoice(int choice) {
                 }
             }
         }
-        case 3:
+        case 3: {
             int numOfFlightsChoice;
             do {
                 displayNumOfFlightsMenu();
                 getUserChoice(numOfFlightsChoice);
                 processNumOfFlightsChoice(numOfFlightsChoice);
             } while(numOfFlightsChoice != 3);
-            break;
+            break;}
 
         case 4: {
             int countriesChoice;
@@ -140,13 +150,51 @@ void Menu::processConsultationChoice(int choice) {
             displayDestOptions();
             getUserChoice(destChoice);
             processDestChoice(destChoice, airportCode);
+            break;}
 
+        case 6: {
+            string airportCode;
+            int x;
+            cout << "Enter Airport code: ";
+            cin >> airportCode;
+            cout << endl << "Enter 'x': ";
+            cin >> x;
+            cout <<endl << endl << "";
+            int destChoice;
+            displayDestOptions();
+            getUserChoice(destChoice);
+            processDestChoice(destChoice,airportCode, x);
+            break;
+        }
+        case 7: {
+            for (pair<Airport *, Airport *> pair: Data::longestTrips()) {
+                cout << "<  " << pair.first->getAirportInfo().getName() << "  --->  "
+                     << pair.second->getAirportInfo().getName() << "  >" << endl << endl;
+            }
+            break;
+        }
+
+        case 8: {
+            int k;
+            cout << "Enter k: ";
+            cin >> k;
+            cout << endl << endl;
+            for (Airport* airport : Data::topAirportsByFlights(k)) {
+                cout << "- " << airport->getAirportInfo().getName() << endl << endl;
+            }
+            break;
+        }
+        case 9: {
+            for (Airport* airport : Data::essentialAirports()) {
+                cout << "- " << airport->getAirportInfo().getName() << endl << endl;
+            }
             break;
         }
 
         default:
             cout << "Invalid choice. Please Enter a valid choice." << endl;
     }
+
 }
 
 
@@ -216,12 +264,12 @@ void Menu::displayToCountriesMenu() {
 void Menu::processToCountriesChoice(int choice) {
     switch (choice) {
         case 1: {
-            string codeOfAirport;
+            string airportCode;
             cout << "Enter the code of the Airport: ";
-            cin >> codeOfAirport;
+            cin >> airportCode;
             cout << "============================" << endl;
-            cout << endl << endl << "Number of countries "<< codeOfAirport << " flies to: " <<
-            Data::getNumCountriesFlyingToAirport(codeOfAirport) << endl << endl;
+            cout << endl << endl << "Number of countries "<< airportCode << " flies to: " <<
+            Data::getNumCountriesFlyingToAirport(airportCode) << endl << endl;
             cout << "============================" << endl;
             break; }
         case 2: {
@@ -249,16 +297,35 @@ void Menu::displayDestOptions() {
 void Menu::processDestChoice(int choice, string airportCode) {
     switch (choice) {
         case 1:
-            cout << "Number of airports available for " << airportCode << ": " << Data::getNumAirportsFromAirport(airportCode) << endl << endl;
+            cout << "Number of airports available for " << airportCode << ": " << Data::getNumDestFromSource(airportCode, choice) << endl << endl;
             break;
 
         case 2:
-            cout << "Number of cities available for " << airportCode << ": " << Data::getNumCitiesFromAirport(airportCode) << endl << endl;
+            cout << "Number of cities available for " << airportCode << ": " << Data::getNumDestFromSource(airportCode, choice) << endl << endl;
             break;
 
         case 3:
-            cout << "Number of countries available for " << airportCode << ": " << Data::getNumCountriesFromAirport(airportCode) << endl << endl;
+            cout << "Number of countries available for " << airportCode << ": " << Data::getNumDestFromSource(airportCode, choice) << endl << endl;
             break;
+    }
+}
+
+void Menu::processDestChoice(int choice,const string& airportCode, int x) {
+switch (choice) {
+    case 1:
+        cout << "Number of airports available for " << airportCode << " in a maximum of " << x <<
+        " stops: "<< Data::numReachableDestinations(airportCode,x,1) << endl << endl;
+        break;
+
+    case 2:
+        cout << "Number of cities available for " << airportCode << " in a maximum of " << x <<
+        " stops: " << Data::numReachableDestinations(airportCode, x, 2) << endl << endl;
+        break;
+
+    case 3:
+        cout << "Number of countries available for " << airportCode << "ina a maximum of " << x <<
+        " stops: " << Data::numReachableDestinations(airportCode, x, 3) << endl << endl;
+        break;
     }
 }
 

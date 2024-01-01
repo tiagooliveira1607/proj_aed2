@@ -9,20 +9,21 @@ class Menu {
 public:
 
     static void run();
+    static void getUserChoice(int& choice);
     static void displayMainMenu();
     static void displayConsultationMenu();
-    static void getUserChoice(int& choice);
-    static void processConsultationChoice(int choice);
     static void displayNumOfFlightsMenu();
-    static void processNumOfFlightsChoice(int choice);
     static void displayToCountriesMenu();
-    static void processToCountriesChoice(int choice);
     static void displayGlobalNumMenu();
+    static void displayDestOptions();
+    static void processConsultationChoice(int choice);
+    static void processNumOfFlightsChoice(int choice);
+    static void processToCountriesChoice(int choice);
     static void processGlobalNum(int choice);
 
 
-    static void displayDestOptions();
     static void processDestChoice(int choice, string airportCode);
+    static void processDestChoice(int choice, const string& airportCode, int x);
 };
 
 

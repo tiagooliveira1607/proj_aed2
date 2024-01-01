@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <sstream>
+#include <set>
 #include "Airline.h"
 #include "Graph.h"
 
@@ -40,13 +41,19 @@ public:
     static int getNumCountriesFlyingToCity(string& airportCode);
 
     //3.5
-    static int getNumAirportsFromAirport(const string& airportCode);
-    static int getNumCitiesFromAirport(const string &airportCode);
-    static int getNumCountriesFromAirport(const string &airportCode);
+    static int getNumDestFromSource(const string& airportCode, int choice);
 
     //3.6
-    int numReachableDestinations(const string& startAirport, int layouts) const;
+    static int numReachableDestinations(const string& startAirport, int layouts, int choice);
 
+    //3.7 -> este ta mal acho eu
+    static vector<pair<Airport*, Airport*>> longestTrips();
+
+    //3.8
+    static vector<Airport*> topAirportsByFlights(int k);
+
+    //3.9
+    static vector<Airport*> essentialAirports() ;
 };
 
 
