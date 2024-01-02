@@ -2,7 +2,6 @@
 
 
 Graph Data::graph;
-
 unordered_map<string, Airline> Data::airlines;
 
 
@@ -605,4 +604,25 @@ vector<Flight*> Data::getBestFlightOptionToClosestAirports_Distance(string& airp
     }
 
     return bestFlightOptions;
+}
+
+bool Data::isValidAirportCode(const string &code) {
+    vector<string> airportCodes = graph.getListOfAirportCodes();
+    for (const string& airportCode : airportCodes) {
+        if (airportCode == code) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Data::isValidAirportName(const string &name) {
+    vector<string> airportNames = graph.getListOfAirportNames();
+
+    for (const string& airportName : airportNames) {
+        if (airportName == name) {
+            return true;
+        }
+    }
+    return false;
 }

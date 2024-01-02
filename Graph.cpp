@@ -402,3 +402,24 @@ vector<string> Graph::getListOfAirportCodes() const {
 
     return res;
 }
+
+vector<string> Graph::getListOfAirportNames() const {
+    vector<string> res = {};
+
+    for (Airport* airport : airportSet) {
+        res.push_back(airport->getAirportInfo().getName());
+    }
+
+    return res;
+}
+
+/*
+vector<string> Graph::getListOfCityNames() const {
+    vector<string> cityNames = {};
+
+    for (Airport* airport : airportSet) {
+
+    }
+    return ;
+}
+*/

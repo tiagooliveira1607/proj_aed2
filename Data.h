@@ -14,11 +14,15 @@ class Data {
 private:
 
     static Graph graph; // Graph structure with airports as vertices and flights as edges
-    static unordered_map<string, Airline> airlines; // Map to store airline details (Airline struct/class needed)
+    static unordered_map<string, Airline> airlines; // Map to store airline details
 
 
 public:
     Data();
+
+    static bool isValidAirportCode(const string& code);
+    static bool isValidAirportName(const string& name);
+    static bool isValidCityName(const string& city);
 
     // Methods to populate data structures from CSV files
     static void readAirports(const string& airportsFilePath);
