@@ -130,10 +130,13 @@ public:
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
     vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
     vector<Airport*> findClosestAirports(double lat, double lon) const;
-    vector<Airport*> findClosestAirports(double lat, double lon,double minDistance) const;
+    vector<Airport*> findClosestAirports(double lat, double lon,double maxDistance) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2) const;
+    vector<Flight*> getBestFlightOptionToClosestAirports(string& airportCode) const;
+    vector<Flight*> getBestFlightOptionToClosestAirports_Distance(string& airportCode, double maxDistance) const;
 
-    vector<string> getListOfAirportCodes() const;
+
+        vector<string> getListOfAirportCodes() const;
 
     };
 

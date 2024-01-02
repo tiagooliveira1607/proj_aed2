@@ -560,16 +560,16 @@ vector<Airport*> Graph::findClosestAirports(double lat, double lon) const {
     return closesteAirports;
 }
 
-vector<Airport*> Graph::findClosestAirports(double lat, double lon, double minDistance) const{
-    vector<Airport*> closesteAirports;
+vector<Airport*> Graph::findClosestAirports(double lat, double lon, double maxDistance) const{
+    vector<Airport*> closestAirports;
     for(auto airport : airportSet){
         double distance = haversineDistance(lat,lon,airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
 
-        if(distance <= minDistance){
-            closesteAirports.push_back(airport);
+        if(distance <= maxDistance){
+            closestAirports.push_back(airport);
         }
     }
-    return closesteAirports;
+    return closestAirports;
 }
 
 double Graph::haversineDistance(double lat1, double lon1, double lat2, double lon2) const {
@@ -588,4 +588,44 @@ double Graph::haversineDistance(double lat1, double lon1, double lat2, double lo
 
     double distance = R * c;
     return distance;
+}
+
+vector<Flight*> Graph::getBestFlightOptionToClosestAirports(string& airportCode) const {
+    auto airport = findAirport(airportCode);
+    vector<Airport*> closestAirportsSource = findClosestAirports(airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+    vector<Flight*> bestFlightOptions;
+
+    for (Airport* destAirport : closestAirportsSource) {
+        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(airport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
+        bestFlightOptions.insert(bestFlightOptions.end(), currentFlightOption.begin(), currentFlightOption.end());
+    }
+
+    return bestFlightOptions;
+}
+
+vector<Flight*> Graph::getBestFlightOptionToClosestAirports_Distance(string& airportCode, double maxDistance) const {
+    auto airport = findAirport(airportCode);
+    vector<Airport*> closestAirportsSource = findClosestAirports(
+            airport->getAirportInfo().getLatitude(),
+            airport->getAirportInfo().getLongitude(),
+            maxDistance
+    );
+
+    vector<Flight*> bestFlightOptions;
+
+    for (Airport* destAirport : closestAirportsSource) {
+        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(
+                airport->getAirportInfo().getCode(),
+                destAirport->getAirportInfo().getCode()
+        );
+
+        bestFlightOptions.insert(
+                bestFlightOptions.end(),
+                currentFlightOption.begin(),
+                currentFlightOption.end()
+        );
+    }
+
+    return bestFlightOptions;
 }
