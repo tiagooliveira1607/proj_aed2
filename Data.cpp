@@ -334,7 +334,6 @@ vector<Airport*> Data::topAirportsByFlights(int k) {
     return topAirports;
 }
 
-
 vector<Airport*> Data::essentialAirports() {
     vector<Airport*> essentialAirportsList;
 
