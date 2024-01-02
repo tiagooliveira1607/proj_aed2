@@ -38,8 +38,7 @@ class Airport {
     bool visited;
     bool processing;
     int indegree;
-    int num;
-    int low;
+    bool ignored;
 
 public:
     explicit Airport(const AirportInfo& airportInfo);
@@ -54,6 +53,9 @@ public:
 
     bool isProcessing() const;
     void setProcessing(bool p);
+
+    bool isIgnored() const;
+    void setIgnored(bool v);
 
     const vector<Flight*>& getFlights() const;
 
@@ -103,41 +105,30 @@ public:
     Graph copyGraph() const;
 
     void dfsVisit(Airport* v, vector<Airport*>& result) const;
-    void dfsVisit3_7(Airport *v, vector<Airport *> &result, int numStops, int maxStops, vector<Airport *>& currentPath) const;
-    void dfsVisit3_9(Airport* v) const;
     vector<Airport*> dfs() const;
     vector<Airport*> dfs(const string& sourceCode) const;
-    vector<Airport*> dfs3_7(const string& sourceCode) const;
+
     void dfs3_9() const;
-    vector<Airport*> bfs(const string& sourceCode) const;
+    void dfsVisit3_9(Airport *v) const;
+
+    void bfs(const string& sourceCode, int x) const;
+    vector<pair<Airport*, int>> bfsLongestDistance(Airport* source) const;
+    vector<Airport*> getAirportsInCity(string& city);
+
+
+    /*
     vector<Airport*> topsort() const;
     bool isDAG() const;
     bool dfsIsDAG(Airport* v) const;
-
-    int getNumFlights() const;
-
-    pair<int,int> airportFlightStats(const string& airportCode) const;
-
-    unordered_map<string,int> getNumFlightsPerCity() const;
-    unordered_map<string,int> getNumFlightsPerAirline() const;
-
-    int getNumCountriesFlyingTo(const string& airportCode) const;
-    int getNumCitiesFlyingTo(const string& airportCode) const;
-
-    int getNumDestinations(const string& airportCode) const;
-    void getNumDestinationsDFS(Airport* sourceAirport, unordered_set<string>& destinations) const;
-
-    int numReachableDestinations(const string& startAirport, int layouts) const;
+     */
 
 
-    vector<Airport*> topAirportsByFlights(int k);
-
-    vector<Airport*> identifyEssentialAirports() const;
-    bool checkAllAreasReachable(const Graph& graph) const;
 
     [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
     vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
+
+    vector<string> getListOfAirportCodes() const;
 
     };
 

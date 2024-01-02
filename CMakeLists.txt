@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27)
+cmake_minimum_required(VERSION 3.22)
 project(proj_aed2)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -11,4 +11,7 @@ add_executable(proj_aed2 main.cpp
         Graph.h
         Graph.cpp
         Menu.cpp
-        Menu.h)
+        Menu.h
+        Application.cpp
+        Application.h
+        Application.h)

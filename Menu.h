@@ -1,20 +1,29 @@
 #ifndef PROJ_AED2_MENU_H
 #define PROJ_AED2_MENU_H
 
-#include <iostream>
 #include "Graph.h"
 #include "Data.h"
 
 
 class Menu {
 public:
-    Menu();
 
-    static void display();
+    static void run();
+    static void getUserChoice(int& choice);
     static void displayMainMenu();
     static void displayConsultationMenu();
-    static void getUserChoice(int& choice);
+    static void displayNumOfFlightsMenu();
+    static void displayToCountriesMenu();
+    static void displayGlobalNumMenu();
+    static void displayDestOptions();
     static void processConsultationChoice(int choice);
+    static void processNumOfFlightsChoice(int choice);
+    static void processToCountriesChoice(int choice);
+    static void processGlobalNum(int choice);
+
+
+    static void processDestChoice(int choice, string airportCode);
+    static void processDestChoice(int choice, const string& airportCode, int x);
 };
 
 

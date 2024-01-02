@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <unordered_map>
+#include <fstream>
+#include <sstream>
+#include <set>
 #include "Airline.h"
 #include "Graph.h"
 
@@ -22,10 +25,35 @@ public:
     static void readAirlines(const string& airlinesFilePath);
     static void readFlights(const string& flightsFilePath);
 
+    //3.1
     static int getNumAirports();
-
     static int getNumFlights();
 
+    //3.2
+    static pair<int,int> airportFlightStats(const string& airportCode) ;
+
+    //3.3
+    static unordered_map<string,int> getNumFlightsPerCity();
+    static unordered_map<string,int> getNumFlightsPerAirline();
+
+    //3.4
+    static int getNumCountriesFlyingToAirport(string& airportCode);
+    static int getNumCountriesFlyingToCity(string& airportCode);
+
+    //3.5
+    static int getNumDestFromSource(const string& airportCode, int choice);
+
+    //3.6
+    static int numReachableDestinations(const string& startAirport, int layouts, int choice);
+
+    //3.7 -> este ta mal acho eu
+    static vector<pair<Airport*, Airport*>> longestTrips();
+
+    //3.8
+    static vector<Airport*> topAirportsByFlights(int k);
+
+    //3.9
+    static vector<Airport*> essentialAirports() ;
 };
 
 
