@@ -10,7 +10,7 @@ void Menu::run() {
         getUserChoice(choice);
 
         switch (choice) {
-            case 1:
+            case 1: {
                 // Consultation Menu
                 int consultationChoice;
                 do {
@@ -52,16 +52,47 @@ void Menu::run() {
                             cout << "Invalid choice. Please enter a valid option." << endl;
                             break;
                     }
-                } while (consultationChoice != 4);
+                } while (consultationChoice != 10);
 
-                break;
+                break;}
 
-            case 2:
-                cout << "Exiting..." << endl;
-                break;
-            default:
+            case 2: {
+                int flightOptionChoice;
+                do {
+                    displayFlightOptionMenu();
+                    getUserChoice(flightOptionChoice);
+
+                    switch (flightOptionChoice) {
+                        case 1:
+                            processFlightOptionChoice(1);
+                            break;
+
+                        case 2:
+                            processFlightOptionChoice(2);
+                            break;
+
+                        case 3:
+                            processFlightOptionChoice(3);
+                            break;
+
+
+                        case 4:
+                            break;
+
+                        default:
+                            cout << "Invalid choice. Please enter a valid option" << endl;
+                            break;
+                    }
+                } while (flightOptionChoice != 4);
+
+            }
+
+            case 3:{
+                break;}
+
+            default:{
                 cout << "Invalid choice. Please enter a valid option." << endl;
-                break;
+                break;}
         }
     }
 
@@ -71,7 +102,8 @@ void Menu::run() {
 void Menu::displayMainMenu() {
     cout << "===== Main Menu =====" << endl;
     cout << "1. Consultation" << endl;
-    cout << "2. Exit" << endl;
+    cout << "2. Best Flight suggestion" << endl;
+    cout << "3. Exit" << endl;
     cout << "=====================" << endl << endl;
 }
 
@@ -96,6 +128,11 @@ void Menu::getUserChoice(int& choice) {
     cin >> choice;
     cout << endl << endl;
 }
+void Menu::getUserAirportCode(string& airportCode) {
+    cout << "Enter Airport Code: ";
+    cin >> airportCode;
+    cout << endl << endl;
+}
 
 
 
@@ -103,16 +140,17 @@ void Menu::processConsultationChoice(int choice) {
     switch (choice) {
         case 1: {
             int globalChoice;
-            displayGlobalNumMenu();
-            getUserChoice(globalChoice);
-            processGlobalNum(globalChoice);
+            do {
+                displayGlobalNumMenu();
+                getUserChoice(globalChoice);
+                processGlobalNum(globalChoice);
+            } while (globalChoice != 3 && globalChoice != 2 && globalChoice != 1);
             break;}
 
         case 2: {
             string airportCode;
             while (true) {
-                cout << "Enter Airport Code: ";
-                cin >> airportCode;
+                getUserAirportCode(airportCode);
                 pair<int, int> flightstats = Data::airportFlightStats(airportCode);
                 if (flightstats.first != 0 && flightstats.second != 0) {
                     cout << "Number of flights from " << airportCode << ": " << flightstats.first << " from "
@@ -129,7 +167,7 @@ void Menu::processConsultationChoice(int choice) {
                 displayNumOfFlightsMenu();
                 getUserChoice(numOfFlightsChoice);
                 processNumOfFlightsChoice(numOfFlightsChoice);
-            } while(numOfFlightsChoice != 3);
+            } while(numOfFlightsChoice != 3 && numOfFlightsChoice != 2 && numOfFlightsChoice != 1);
             break;}
 
         case 4: {
@@ -138,14 +176,12 @@ void Menu::processConsultationChoice(int choice) {
                 displayToCountriesMenu();
                 getUserChoice(countriesChoice);
                 processToCountriesChoice(countriesChoice);
-            } while (countriesChoice != 3);
+            } while (countriesChoice != 3 && countriesChoice != 2 && countriesChoice != 1);
             break; }
 
         case 5: {
             string airportCode;
-            cout << endl << "Enter Airport code: ";
-            cin >> airportCode;
-            cout << endl;
+            getUserAirportCode(airportCode);
             int destChoice;
             displayDestOptions();
             getUserChoice(destChoice);
@@ -155,11 +191,10 @@ void Menu::processConsultationChoice(int choice) {
         case 6: {
             string airportCode;
             int x;
-            cout << "Enter Airport code: ";
-            cin >> airportCode;
+            getUserAirportCode(airportCode);
             cout << endl << "Enter 'x': ";
             cin >> x;
-            cout <<endl << endl << "";
+            cout <<endl << endl;
             int destChoice;
             displayDestOptions();
             getUserChoice(destChoice);
@@ -190,9 +225,11 @@ void Menu::processConsultationChoice(int choice) {
             }
             break;
         }
+        case 10:
+            return;
 
         default:
-            cout << "Invalid choice. Please Enter a valid choice." << endl;
+            cout << "Invalid choice. Please Enter a valid option." << endl;
     }
 
 }
@@ -215,8 +252,13 @@ void Menu::processGlobalNum(int choice) {
         case 2:
             cout << "Global number of Flights: " << Data::getNumFlights() << endl << endl;
             break;
+
         case 3:
-            return;
+            break;
+
+        default:
+            cout << "Invalid choice. Please Enter a valid option." << endl;
+            break;
     }
 }
 
@@ -249,6 +291,9 @@ void Menu::processNumOfFlightsChoice(int choice) {
             break;
         case 3:
             return;
+
+        default:
+            cout << "Invalid choice. Please Enter a valid option." << endl;
     }
 }
 
@@ -283,6 +328,9 @@ void Menu::processToCountriesChoice(int choice) {
             break;}
         case 3:
             return;
+
+        default:
+            cout << "Invalid choice. Please Enter a valid option." << endl;
     }
 }
 
@@ -307,6 +355,9 @@ void Menu::processDestChoice(int choice, string airportCode) {
         case 3:
             cout << "Number of countries available for " << airportCode << ": " << Data::getNumDestFromSource(airportCode, choice) << endl << endl;
             break;
+
+        default:
+            cout << "Invalid choice. Please Enter a valid option." << endl;
     }
 }
 
@@ -326,6 +377,80 @@ switch (choice) {
         cout << "Number of countries available for " << airportCode << "ina a maximum of " << x <<
         " stops: " << Data::numReachableDestinations(airportCode, x, 3) << endl << endl;
         break;
+
+    default:
+        cout << "Invalid choice. Please Enter a valid option." << endl;
+    }
+}
+
+void Menu::displayFlightOptionMenu() {
+    cout << "============================" << endl;
+    cout << "1. By Airport Code or Name" << endl;
+    cout << "2. By City" << endl;
+    cout << "3. By Geopraphical Coordinates" << endl;
+    cout << "4. Return" << endl;
+    cout << "=============================" << endl << endl;
+}
+
+void Menu::processFlightOptionChoice(int choice) {
+    switch (choice) {
+        case 1:
+            int choice1;
+            do {
+                cout << "============================" << endl;
+                cout << "1. By Airport Code" << endl;
+                cout << "2. By Airport Name" << endl;
+                cout << "3. Return" << endl;
+                cout << "=============================" << endl << endl;
+                getUserChoice(choice1);
+
+                switch (choice1) {
+                    case 1: {
+                        string airportSourceCode;
+                        string airportDestCode;
+                        cout << "Enter Airport Source Code: ";
+                        cin >> airportSourceCode;
+                        cout << endl << "Enter Airport Destination Code: ";
+                        cin >> airportDestCode;
+                        cout << endl;
+
+                        vector<Flight*> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,airportDestCode);
+                        if (bestFlightOption.empty()) {
+                            cout << "Please Enter valid Source and Destination Airport Codes." << endl;
+                            break;
+                        }
+                        cout << "<   " << Data::getAirportNameByCode(airportSourceCode);
+                        for (Flight* flight : bestFlightOption) {
+                            cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
+                            Data::getAirportNameByCode(flight->getDest()->getAirportInfo().getCode());
+                        }
+                        cout << "   >" << endl << endl;
+                        }
+                        break;
+
+                    //To continue..
+                    case 2:{
+                        string airportName;
+                        cout << "Enter Airport Name: ";
+                        cin >> airportName;}
+                    case 3: {
+                        break;
+                    }
+                    default:
+                        cout << "Invalid Option. Enter a valid option" << endl;
+
+                }
+            }while (choice1 != 3 && choice1 != 2 && choice1 != 1);
+
+        case 2:
+
+        case 3:
+
+        case 4:
+            break;
+
+        default:
+            cout << "Invalid choice. Please Enter a valid option." << endl;
     }
 }
 

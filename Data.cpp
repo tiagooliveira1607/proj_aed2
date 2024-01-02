@@ -109,7 +109,7 @@ void Data::readAirlines(const string &airlinesFilePath){
 
 int Data::getNumAirports() {
 
-    return graph.getNumAirports();
+    return graph.getAirportSet().size();
 }
 
 int Data::getNumFlights() {
@@ -365,4 +365,103 @@ vector<Airport*> Data::essentialAirports() {
     return essentialAirportsList;
 }
 
+
+
+vector<Flight *> Data::getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) {
+    Airport* sourceAirport = graph.findAirport(sourceCode);
+    Airport* destinationAirport = graph.findAirport(destinationCode);
+
+    if (!sourceAirport || !destinationAirport) {
+        return {};
+    }
+
+    unordered_map<Airport*, vector<Flight*>> bestFlights;
+    queue<Airport*> q;
+    q.push(sourceAirport);
+    bestFlights[sourceAirport] = vector<Flight*>();
+
+    while (!q.empty()) {
+        Airport* currentAirport = q.front();
+        q.pop();
+
+        for (Flight* flight : currentAirport->getFlights()) {
+            Airport* nextAirport = flight->getDest();
+
+            if (bestFlights.find(nextAirport) == bestFlights.end()) {
+                bestFlights[nextAirport] = bestFlights[currentAirport];
+                bestFlights[nextAirport].push_back(flight);
+                q.push(nextAirport);
+            }
+        }
+    }
+    // Retrieve the best flights for the destination airport
+    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
+
+
+    return bestFlightsToDestination;
+}
+
+vector<Flight *> Data::getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) {
+    Airport* sourceAirport = nullptr;
+    Airport* destinationAirport = nullptr;
+
+    for (Airport* airport : graph.getAirportSet()) {
+        if (airport->getAirportInfo().getName() == sourceName) {
+            sourceAirport = airport;
+            break;
+        }
+    }
+
+    for (Airport* airport : graph.getAirportSet()) {
+        if (airport->getAirportInfo().getName() == destinationName) {
+            destinationAirport = airport;
+            break;
+        }
+    }
+
+
+    if (!sourceAirport || !destinationAirport) {
+        return {};
+    }
+
+    unordered_map<Airport*, vector<Flight*>> bestFlights;
+    queue<Airport*> q;
+    q.push(sourceAirport);
+    bestFlights[sourceAirport] = vector<Flight*>();
+
+    while (!q.empty()) {
+        Airport* currentAirport = q.front();
+        q.pop();
+
+        for (Flight* flight : currentAirport->getFlights()) {
+            Airport* nextAirport = flight->getDest();
+
+            if (bestFlights.find(nextAirport) == bestFlights.end()) {
+                bestFlights[nextAirport] = bestFlights[currentAirport];
+                bestFlights[nextAirport].push_back(flight);
+                q.push(nextAirport);
+            }
+        }
+    }
+
+    // Retrieve the best flights for the destination airport
+    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
+
+    return bestFlightsToDestination;
+}
+
+string Data::getAirportNameByCode(const string &code) {
+    string airportName;
+    for (Airport* airport : graph.getAirportSet()){
+        if (airport->getAirportInfo().getCode() == code) {
+            airportName = airport->getAirportInfo().getName();
+        }
+    }
+    return airportName;
+}
+
+string Data::getAirlineNameByCode(const string &code) {
+    auto airlineName = airlines.at(code).getName();
+    return airlineName;
+}
 

@@ -54,6 +54,12 @@ public:
 
     //3.9
     static vector<Airport*> essentialAirports() ;
+
+    //4.1
+    [[nodiscard]] static vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) ;
+    static vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) ;
+    static string getAirportNameByCode(const string& code);
+    static string getAirlineNameByCode(const string& code);
 };
 
 
