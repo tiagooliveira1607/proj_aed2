@@ -9,6 +9,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <algorithm>
+#include <cmath>
+
 using namespace std;
 
 
@@ -127,6 +129,9 @@ public:
     [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
     vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
     vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
+    vector<Airport*> findClosestAirports(double lat, double lon) const;
+    vector<Airport*> findClosestAirports(double lat, double lon,double minDistance) const;
+    double haversineDistance(double lat1, double lon1, double lat2, double lon2) const;
 
     vector<string> getListOfAirportCodes() const;
 

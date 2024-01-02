@@ -542,3 +542,50 @@ vector<Airport *> Graph::getAirportsInCity(string &city) {
 
     return airports;
 }
+
+vector<Airport*> Graph::findClosestAirports(double lat, double lon) const {
+    vector<Airport*> closesteAirports;
+    double minDistance = 100000000000;
+    for(auto airport : airportSet){
+        double distance = haversineDistance(lat, lon, airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+        if(distance < minDistance){
+            minDistance = distance;
+            closesteAirports.clear();
+            closesteAirports.push_back(airport);
+        } else if (distance == minDistance){
+            closesteAirports.push_back(airport);
+        }
+    }
+    return closesteAirports;
+}
+
+vector<Airport*> Graph::findClosestAirports(double lat, double lon, double minDistance) const{
+    vector<Airport*> closesteAirports;
+    for(auto airport : airportSet){
+        double distance = haversineDistance(lat,lon,airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+        if(distance <= minDistance){
+            closesteAirports.push_back(airport);
+        }
+    }
+    return closesteAirports;
+}
+
+double Graph::haversineDistance(double lat1, double lon1, double lat2, double lon2) const {
+    const double R = 6371.0; //Raio da terra em km
+
+    //Converter de graus pra radianos
+    lat1 = lat1 * M_PI/180.0;
+    lon1 = lon1 * M_PI/180.0;
+    lat2 = lat2 * M_PI/180.0;
+    lon2 = lon2 * M_PI/180.0;
+
+    double deltalat = lat2 - lat1;
+    double deltalon = lon2 - lon1;
+    double a = sin(deltalat/2.0) * sin(deltalat/2.0) + cos(lat1) * cos(lat2) * sin(deltalon/2.0) * sin(deltalon/2.0);
+    double c = 2.0 * atan2(sqrt(a),sqrt(1.0 - a));
+
+    double distance = R * c;
+    return distance;
+}
