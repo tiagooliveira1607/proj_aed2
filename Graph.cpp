@@ -132,10 +132,6 @@ Airport* Graph::findAirport(const string &airportCode) const {
     return nullptr;
 }
 
-int Graph::getNumAirports() const {
-    return airportSet.size();
-}
-
 bool Graph::addAirport(const AirportInfo &info) {
     if(findAirport(info.getCode()) != nullptr){
         return false;
@@ -381,92 +377,6 @@ void Graph::dfsVisit3_9(Airport *v) const {
             dfsVisit3_9(w);
         }
     }
-}
-
-
-
-
-vector<Flight *> Graph::getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const {
-    Airport* sourceAirport = findAirport(sourceCode);
-    Airport* destinationAirport = findAirport(destinationCode);
-
-    if (!sourceAirport || !destinationAirport) {
-        return {};
-    }
-
-    unordered_map<Airport*, vector<Flight*>> bestFlights;
-    queue<Airport*> q;
-    q.push(sourceAirport);
-    bestFlights[sourceAirport] = vector<Flight*>();
-
-    while (!q.empty()) {
-        Airport* currentAirport = q.front();
-        q.pop();
-
-        for (Flight* flight : currentAirport->getFlights()) {
-            Airport* nextAirport = flight->getDest();
-
-            if (bestFlights.find(nextAirport) == bestFlights.end()) {
-                bestFlights[nextAirport] = bestFlights[currentAirport];
-                bestFlights[nextAirport].push_back(flight);
-                q.push(nextAirport);
-            }
-        }
-    }
-    // Retrieve the best flights for the destination airport
-    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
-
-
-    return bestFlightsToDestination;
-}
-
-vector<Flight *> Graph::getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const{
-    Airport* sourceAirport = nullptr;
-    Airport* destinationAirport = nullptr;
-
-    for (Airport* airport : airportSet) {
-        if (airport->getAirportInfo().getName() == sourceName) {
-            sourceAirport = airport;
-            break;
-        }
-    }
-
-    for (Airport* airport : airportSet) {
-        if (airport->getAirportInfo().getName() == destinationName) {
-            destinationAirport = airport;
-            break;
-        }
-    }
-
-
-    if (!sourceAirport || !destinationAirport) {
-        return {};
-    }
-
-    unordered_map<Airport*, vector<Flight*>> bestFlights;
-    queue<Airport*> q;
-    q.push(sourceAirport);
-    bestFlights[sourceAirport] = vector<Flight*>();
-
-    while (!q.empty()) {
-        Airport* currentAirport = q.front();
-        q.pop();
-
-        for (Flight* flight : currentAirport->getFlights()) {
-            Airport* nextAirport = flight->getDest();
-
-            if (bestFlights.find(nextAirport) == bestFlights.end()) {
-                bestFlights[nextAirport] = bestFlights[currentAirport];
-                bestFlights[nextAirport].push_back(flight);
-                q.push(nextAirport);
-            }
-        }
-    }
-
-    // Retrieve the best flights for the destination airport
-    vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
-
-    return bestFlightsToDestination;
 }
 
 vector<vector<Flight*>> Graph::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const{

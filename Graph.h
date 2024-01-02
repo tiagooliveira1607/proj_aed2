@@ -98,13 +98,11 @@ class Graph {
 public:
     Graph();
     Airport* findAirport(const string& airportCode) const;
-    int getNumAirports() const;
     bool addAirport(const AirportInfo& info);
     bool removeAirport(const string& airportCode); //return true if airport exists/is successfully removed
     bool addFlight(const string &sourcCode, const string& destCode, const string& airlineCode);
     bool removeFlight(const string &sourcCode, const string &destCode) const;
     const vector<Airport*>& getAirportSet() const;
-    Graph copyGraph() const;
 
     void dfsVisit(Airport* v, vector<Airport*>& result) const;
     vector<Airport*> dfs() const;
@@ -126,8 +124,6 @@ public:
 
 
 
-    [[nodiscard]] vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) const;
-    vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) const;
     vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
     vector<Airport*> findClosestAirports(double lat, double lon) const;
     vector<Airport*> findClosestAirports(double lat, double lon,double maxDistance) const;
