@@ -465,3 +465,144 @@ string Data::getAirlineNameByCode(const string &code) {
     return airlineName;
 }
 
+
+
+vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const{
+    vector<vector<Flight*>> bestFlights;
+
+    // Find all airports in the source city
+    vector<Airport*> sourceAirports;
+    for (Airport* airport : graph.getAirportSet()) {
+        if (airport->getAirportInfo().getCity() == sourceCity) {
+            sourceAirports.push_back(airport);
+        }
+    }
+
+    // Find all airports in the destination city
+    vector<Airport*> destinationAirports;
+    for (Airport* airport : graph.getAirportSet()) {
+        if (airport->getAirportInfo().getCity() == destinationCity) {
+            destinationAirports.push_back(airport);
+        }
+    }
+
+    for (Airport* sourceAirport : sourceAirports) {
+        for (Airport* destinationAirport : destinationAirports) {
+            if (sourceAirport != destinationAirport) {
+                // Use BFS to find the best flights between the current pair
+                unordered_map<Airport*, vector<Flight*>> bestFlightsMap;
+                queue<Airport*> q;
+                q.push(sourceAirport);
+                bestFlightsMap[sourceAirport] = vector<Flight*>();
+
+                while (!q.empty()) {
+                    Airport* currentAirport = q.front();
+                    q.pop();
+
+                    for (Flight* flight : currentAirport->getFlights()) {
+                        Airport* nextAirport = flight->getDest();
+
+                        if (bestFlightsMap.find(nextAirport) == bestFlightsMap.end()) {
+                            bestFlightsMap[nextAirport] = bestFlightsMap[currentAirport];
+                            bestFlightsMap[nextAirport].push_back(flight);
+                            q.push(nextAirport);
+                        }
+                    }
+                }
+
+                vector<Flight*> bestFlightsToDestination = bestFlightsMap[destinationAirport];
+                bestFlights.push_back(bestFlightsToDestination);
+            }
+        }
+    }
+
+    return bestFlights;
+}
+
+
+vector<Airport*> Data::findClosestAirports(double lat, double lon) const {
+    vector<Airport*> closesteAirports;
+    double minDistance = 100000000000;
+    for(auto airport : graph.getAirportSet()){
+        double distance = haversineDistance(lat, lon, airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+        if(distance < minDistance){
+            minDistance = distance;
+            closesteAirports.clear();
+            closesteAirports.push_back(airport);
+        } else if (distance == minDistance){
+            closesteAirports.push_back(airport);
+        }
+    }
+    return closesteAirports;
+}
+
+vector<Airport*> Data::findClosestAirports(double lat, double lon, double maxDistance) const{
+    vector<Airport*> closestAirports;
+    for(auto airport : graph.getAirportSet()){
+        double distance = haversineDistance(lat,lon,airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+        if(distance <= maxDistance){
+            closestAirports.push_back(airport);
+        }
+    }
+    return closestAirports;
+}
+
+double Data::haversineDistance(double lat1, double lon1, double lat2, double lon2) const {
+    const double R = 6371.0; //Raio da terra em km
+
+    //Converter de graus pra radianos
+    lat1 = lat1 * M_PI/180.0;
+    lon1 = lon1 * M_PI/180.0;
+    lat2 = lat2 * M_PI/180.0;
+    lon2 = lon2 * M_PI/180.0;
+
+    double deltalat = lat2 - lat1;
+    double deltalon = lon2 - lon1;
+    double a = sin(deltalat/2.0) * sin(deltalat/2.0) + cos(lat1) * cos(lat2) * sin(deltalon/2.0) * sin(deltalon/2.0);
+    double c = 2.0 * atan2(sqrt(a),sqrt(1.0 - a));
+
+    double distance = R * c;
+    return distance;
+}
+
+vector<Flight*> Data::getBestFlightOptionToClosestAirports(string& airportCode) const {
+    auto airport = graph.findAirport(airportCode);
+    vector<Airport*> closestAirportsSource = findClosestAirports(airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+
+    vector<Flight*> bestFlightOptions;
+
+    for (Airport* destAirport : closestAirportsSource) {
+        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(airport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
+        bestFlightOptions.insert(bestFlightOptions.end(), currentFlightOption.begin(), currentFlightOption.end());
+    }
+
+    return bestFlightOptions;
+}
+
+vector<Flight*> Data::getBestFlightOptionToClosestAirports_Distance(string& airportCode, double maxDistance) const {
+    auto airport = graph.findAirport(airportCode);
+    vector<Airport*> closestAirportsSource = findClosestAirports(
+            airport->getAirportInfo().getLatitude(),
+            airport->getAirportInfo().getLongitude(),
+            maxDistance
+    );
+
+    vector<Flight*> bestFlightOptions;
+
+    for (Airport* destAirport : closestAirportsSource) {
+        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(
+                airport->getAirportInfo().getCode(),
+                destAirport->getAirportInfo().getCode()
+        );
+
+        bestFlightOptions.insert(
+                bestFlightOptions.end(),
+                currentFlightOption.begin(),
+                currentFlightOption.end()
+        );
+    }
+
+    return bestFlightOptions;
+}
