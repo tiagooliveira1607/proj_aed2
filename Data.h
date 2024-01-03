@@ -40,7 +40,7 @@ public:
 
     //3.3
     static map<string, int> getNumFlightsPerCity();
-    static unordered_map<string,int> getNumFlightsPerAirline();
+    static map<string, int> getNumFlightsPerAirline();
 
     //3.4
     static int getNumCountriesFlyingToAirport(string& airportCode);
