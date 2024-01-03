@@ -548,33 +548,24 @@ vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceC
 
 
 vector<Airport*> Data::findClosestAirports(double lat, double lon) const {
-    vector<Airport*> closesteAirports;
-    double minDistance = 100000000000;
-    for(auto airport : graph.getAirportSet()){
-        double distance = haversineDistance(lat, lon, airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
-
-        if(distance < minDistance){
-            minDistance = distance;
-            closesteAirports.clear();
-            closesteAirports.push_back(airport);
-        } else if (distance == minDistance){
-            closesteAirports.push_back(airport);
-        }
-    }
-    return closesteAirports;
-}
-
-vector<Airport*> Data::findClosestAirports(double lat, double lon, double maxDistance) const{
     vector<Airport*> closestAirports;
-    for(auto airport : graph.getAirportSet()){
-        double distance = haversineDistance(lat,lon,airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+    double minDistance = 1000000000;
 
-        if(distance <= maxDistance){
+    for (auto airport : graph.getAirportSet()) {
+        double distance = haversineDistance(lat, lon, airport->getAirportInfo().getLatitude(), airport->getAirportInfo().getLongitude());
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestAirports.clear();
+            closestAirports.push_back(airport);
+        } else if (distance == minDistance) {
             closestAirports.push_back(airport);
         }
     }
+
     return closestAirports;
 }
+
 
 double Data::haversineDistance(double lat1, double lon1, double lat2, double lon2) const {
     const double R = 6371.0; //Raio da terra em km
@@ -594,45 +585,20 @@ double Data::haversineDistance(double lat1, double lon1, double lat2, double lon
     return distance;
 }
 
-vector<Flight*> Data::getBestFlightOptionToClosestAirports(string& airportCode) const {
-    auto airport = graph.findAirport(airportCode);
-    vector<Airport*> closestAirportsSource = findClosestAirports(airport->getAirportInfo().getLatitude(),airport->getAirportInfo().getLongitude());
+vector<Flight*> Data::getBestFlightOptionToClosestAirports(double lat, double lon) const {
+    auto sourceAirport = graph.getAirportByCoordinates(lat,lon);
 
+    vector<Airport*> closestAirportsSource = findClosestAirports(lat,lon);
     vector<Flight*> bestFlightOptions;
 
     for (Airport* destAirport : closestAirportsSource) {
-        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(airport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
+        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(sourceAirport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
         bestFlightOptions.insert(bestFlightOptions.end(), currentFlightOption.begin(), currentFlightOption.end());
     }
 
     return bestFlightOptions;
 }
 
-vector<Flight*> Data::getBestFlightOptionToClosestAirports_Distance(string& airportCode, double maxDistance) const {
-    auto airport = graph.findAirport(airportCode);
-    vector<Airport*> closestAirportsSource = findClosestAirports(
-            airport->getAirportInfo().getLatitude(),
-            airport->getAirportInfo().getLongitude(),
-            maxDistance
-    );
-
-    vector<Flight*> bestFlightOptions;
-
-    for (Airport* destAirport : closestAirportsSource) {
-        vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(
-                airport->getAirportInfo().getCode(),
-                destAirport->getAirportInfo().getCode()
-        );
-
-        bestFlightOptions.insert(
-                bestFlightOptions.end(),
-                currentFlightOption.begin(),
-                currentFlightOption.end()
-        );
-    }
-
-    return bestFlightOptions;
-}
 
 bool Data::isValidAirportCode(const string &code) {
     vector<string> airportCodes = graph.getListOfAirportCodes();
@@ -658,7 +624,7 @@ bool Data::isValidAirportName(const string &name) {
 bool Data::isValidCityName(const string &name) {
     vector<string> cityNames = graph.getListOfCityNames();
 
-    for (const string& cityName : cityNames) {
+    for (const string &cityName: cityNames) {
         if (cityName == name) {
             return true;
         }
@@ -666,3 +632,4 @@ bool Data::isValidCityName(const string &name) {
 
     return false;
 }
+

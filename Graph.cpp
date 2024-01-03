@@ -423,3 +423,15 @@ vector<string> Graph::getListOfCityNames() const {
     vector<string> cityNames(uniqueCityNames.begin(), uniqueCityNames.end());
     return cityNames;
 }
+
+Airport* Graph::getAirportByCoordinates(double lat, double lon) const{
+    Airport* airport;
+
+    for(auto ap : airportSet){
+        if(ap->getAirportInfo().getLatitude() == lat && ap->getAirportInfo().getLongitude() == lon){
+            airport = ap;
+            return airport;
+        }
+    }
+    return nullptr;
+}

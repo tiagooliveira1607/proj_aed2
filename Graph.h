@@ -118,6 +118,7 @@ public:
     vector<string> getListOfAirportCodes() const;
     vector<string> getListOfAirportNames() const;
     vector<string> getListOfCityNames() const;
+    Airport* getAirportByCoordinates(double lat, double lon) const;
 
     /*
     vector<Airport*> topsort() const;
