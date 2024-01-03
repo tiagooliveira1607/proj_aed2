@@ -466,7 +466,7 @@ void Menu::displayFlightOptionMenu() {
     cout << "============================" << endl;
     cout << "1. By Airport Code or Name" << endl;
     cout << "2. By City" << endl;
-    cout << "3. By Geopraphical Coordinates" << endl;
+    cout << "3. By Geopraphical Coordinates (closest Airport)" << endl;
     cout << "4. Return" << endl;
     cout << "=============================" << endl << endl;
 }
@@ -561,11 +561,16 @@ void Menu::processFlightOptionChoice(int choice) {
         }
 
         case 3: {
-            double sourceLat, sourceLon, destLat, destLon;
+            double sourceLat, sourceLon;
             cout << "Source" << endl;
             getUserCoordinates(sourceLat,sourceLon);
-            cout << "Destination" << endl;
-            getUserCoordinates(destLat, destLon);
+
+            vector<Flight*> bestFlightOption = Data::getBestFlightOptionToClosestAirports(sourceLat,sourceLon);
+
+            cout << "<   " << Data::getAirportByCoordinates(sourceLat,sourceLon)->getAirportInfo().getName();
+            for (Flight* flight : bestFlightOption) {
+
+            }
             break;
         }
 

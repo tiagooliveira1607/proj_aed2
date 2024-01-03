@@ -548,7 +548,7 @@ vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceC
 }
 
 
-vector<Airport*> Data::findClosestAirports(double lat, double lon) const {
+vector<Airport*> Data::findClosestAirports(double lat, double lon){
     vector<Airport*> closestAirports;
     double minDistance = 1000000000;
 
@@ -568,7 +568,7 @@ vector<Airport*> Data::findClosestAirports(double lat, double lon) const {
 }
 
 
-double Data::haversineDistance(double lat1, double lon1, double lat2, double lon2) const {
+double Data::haversineDistance(double lat1, double lon1, double lat2, double lon2) {
     const double R = 6371.0; //Raio da terra em km
 
     //Converter de graus pra radianos
@@ -586,7 +586,7 @@ double Data::haversineDistance(double lat1, double lon1, double lat2, double lon
     return distance;
 }
 
-vector<Flight*> Data::getBestFlightOptionToClosestAirports(double lat, double lon) const {
+vector<Flight*> Data::getBestFlightOptionToClosestAirports(double lat, double lon) {
     auto sourceAirport = graph.getAirportByCoordinates(lat,lon);
 
     vector<Airport*> closestAirportsSource = findClosestAirports(lat,lon);
@@ -632,5 +632,9 @@ bool Data::isValidCityName(const string &name) {
     }
 
     return false;
+}
+
+Airport *Data::getAirportByCoordinates(const double& lat, const double& lon) {
+    return graph.getAirportByCoordinates(lat,lon);
 }
 
