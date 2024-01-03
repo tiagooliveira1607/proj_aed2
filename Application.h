@@ -12,6 +12,10 @@ class Application {
 
 public:
 
+    /**
+     * @brief Reads the csv files and initializes the menu.
+     * @details Time complexity: O(1).
+     */
     void static run();
 
 };
