@@ -115,7 +115,8 @@ public:
     vector<pair<Airport*, int>> bfsLongestDistance(Airport* source) const;
     vector<Airport*> getAirportsInCity(string& city);
     vector<string> getListOfAirportCodes() const;
-
+    vector<string> getListOfAirportNames() const;
+    vector<string> getListOfCityNames() const;
 
     /*
     vector<Airport*> topsort() const;
