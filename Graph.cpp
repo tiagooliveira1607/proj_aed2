@@ -231,7 +231,6 @@ void Graph::bfs(const string& sourceCode, int x) const {
         }
 
         queue<pair<Airport*, int>> auxQueue;
-        source->setVisited(true);
         auxQueue.push({source, 0});
 
         while (!auxQueue.empty()) {

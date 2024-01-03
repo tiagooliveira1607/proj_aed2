@@ -69,7 +69,7 @@ public:
 
 
 
-    vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
+    static vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
     vector<Airport*> findClosestAirports(double lat, double lon) const;
     vector<Airport*> findClosestAirports(double lat, double lon,double maxDistance) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2) const;

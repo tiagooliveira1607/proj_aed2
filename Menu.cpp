@@ -40,6 +40,23 @@ void Menu::getUserCityName(string &cityName) {
     }
 }
 
+void Menu::getUserAirportName(string &airportName) {
+    bool validAirportName = false;
+
+    while (!validAirportName) {
+        cout << "Enter Airport Name: ";
+        cin >> airportName;
+        cout << endl << endl;
+
+        validAirportName = Data::isValidAirportName(airportName);
+
+        if (!validAirportName) {
+            cout << "Invalid Airport Name. Reenter an Airport Name that exists." << endl;
+        }
+    }
+}
+
+
 
 void Menu::run() {
     int choice = 0;
@@ -90,6 +107,9 @@ void Menu::run() {
                             cout << "Invalid choice. Please enter a valid option." << endl;
                             break;
                     }
+                    cout << "Press Enter to continue...";
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cin.get();
                 } while (consultationChoice != 10);
 
                 break;}
@@ -456,33 +476,13 @@ void Menu::processFlightOptionChoice(int choice) {
                     case 1: {
                         string airportSourceCode;
                         string airportDestCode;
-                        bool validSource = false;
-                        bool validDest = false;
 
-                        while (!validSource) {
-                            cout << "Enter Airport Source Code: ";
-                            cin >> airportSourceCode;
-                            cout << endl;
-                            validSource = Data::isValidAirportCode(airportSourceCode);
+                        cout << "Source" << endl;
+                        getUserAirportCode(airportSourceCode);
+                        cout << "Destination" << endl;
+                        getUserAirportCode(airportDestCode);
 
-                            if (!validSource) {
-                                cout << "Invalid Airport Code. Reenter an Airport Code that exists." << endl;
-                            }
-                        }
-
-                        while (!validDest) {
-                            cout << "Enter Airport Destination Code: ";
-                            cin >> airportDestCode;
-                            cout << endl;
-                            validDest = Data::isValidAirportCode(airportDestCode);
-
-                            if (!validDest) {
-                                cout << "Invalid Airport Code. Reenter an Airport Code that exists." << endl;
-                            }
-                        }
-
-                        vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,
-                                                                                                  airportDestCode);
+                        vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,airportDestCode);
 
                         cout << "<   " << Data::getAirportNameByCode(airportSourceCode);
                         for (Flight *flight: bestFlightOption) {
@@ -498,60 +498,52 @@ void Menu::processFlightOptionChoice(int choice) {
                     case 2: {
                         string airportSourceName;
                         string airportDestName;
-                        bool validSource = false;
-                        bool validDest = false;
 
-                        while (!validSource) {
-                            cout << "Enter Airport Source Name: ";
-                            cin.ignore(); // Ignore any previous newline character in the input buffer
-                            getline(cin, airportSourceName);
-                            cout << endl;
-                            validSource = Data::isValidAirportName(airportSourceName);
-
-                            if (!validSource) {
-                                cout << "Invalid Airport Name. Reenter an Airport Name that exists." << endl;
-                            }
-                        }
-
-                        while (!validDest) {
-                            cout << "Enter Airport Destination Name: ";
-                            getline(cin, airportDestName);
-                            cout << endl;
-                            validDest = Data::isValidAirportName(airportDestName);
-
-                            if (!validDest) {
-                                cout << "Invalid Airport Name. Reenter an Airport Name that exists." << endl;
-                            }
-                        }
+                        cout << "Source" << endl;
+                        getUserAirportName(airportSourceName);
+                        cout << "Destination" << endl;
+                        getUserAirportName(airportDestName);
 
                         vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportName(airportSourceName,
                                                                                                   airportDestName);
-
                         cout << "<   " << airportSourceName;
                         for (Flight *flight: bestFlightOption) {
                             cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
                                  airportDestName;
                         }
                         cout << "   >" << endl << endl;
-
                         break;
                     }
-
                     case 3:
                         break;
-
                     default:
                         cout << "Invalid choice. Please Enter a valid option." << endl;
                         break;
-
                 }
 
             } while (choice1 != 3 && choice1 != 2 && choice1 != 1);
         }
 
         case 2: {
-            string cityName;
-            getUserCityName(cityName);
+            string citySourceName;
+            string cityDestName;
+
+            cout << "Source" << endl;
+            getUserCityName(citySourceName);
+            cout << "Destination" << endl;
+            getUserCityName(cityDestName);
+
+            vector<vector<Flight*>> bestFlightOption = Data::getBestFlightOption_CityName(citySourceName, cityDestName);
+
+            for (const auto& flightSet : bestFlightOption) {
+                for (Flight* flight : flightSet) {
+                    cout << "<   " << citySourceName;
+                    cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  ";
+                    cout << cityDestName << "   >" << endl;
+                }
+            }
+            break;
+
         }
 
         case 3: {
@@ -566,4 +558,3 @@ void Menu::processFlightOptionChoice(int choice) {
             break;
     }
 }
-
