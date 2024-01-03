@@ -200,8 +200,8 @@ public:
     static vector<Airport*> essentialAirports();
 
     /**
-     * @brief Function that gives the best flights to go from one airport
-     * to another.
+     * @brief Function that gives the best path to go from one airport
+     * to another when the user gives the code of the airport.
      * @details Time complexity: O(V + E), V being the number of airports and
      * E the number of flights.
      * @param sourceCode String representing the code of the source airport.
@@ -212,7 +212,8 @@ public:
     [[nodiscard]] static vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode);
 
     /**
-     * @brief
+     * @brief Function that gives the best path to go from one airport
+     * to another when the user gives the name of the airport.
      * @details Time complexity: O(V + E), V being the number of airports
      * and E the number of flights.
      * @param sourceName String representing the code of the starting airport.
