@@ -220,7 +220,7 @@ void Menu::processConsultationChoice(int choice) {
             string airportCode;
             int x;
             getUserAirportCode(airportCode);
-            cout << endl << "Enter 'x': ";
+            cout << endl << "Enter the maximum number of layouts(stops): ";
             cin >> x;
             cout << endl << endl;
             int destChoice;

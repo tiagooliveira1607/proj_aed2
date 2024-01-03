@@ -8,6 +8,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <stack>
 #include "Airline.h"
 #include "Graph.h"
 
@@ -52,7 +53,7 @@ public:
     //3.6
     static int numReachableDestinations(const string& startAirport, int layouts, int choice);
 
-    //3.7 -> este ta mal acho eu
+    //3.7
     static vector<pair<Airport*, Airport*>> longestTrips();
 
     //3.8

@@ -242,7 +242,7 @@ int Data::numReachableDestinations(const string &startAirportCode, int layouts, 
     if(!startAirport) return -1;
 
     graph.bfs(startAirportCode,layouts);
-    set<Airport*> visitedAirports = {};
+    set<Airport*> visitedAirports;
     for (Airport *airport: graph.getAirportSet()) {
         if (airport->isVisited()) {
             visitedAirports.insert(airport);
@@ -272,34 +272,44 @@ int Data::numReachableDestinations(const string &startAirportCode, int layouts, 
 }
 
 vector<pair<Airport*, Airport*>> Data::longestTrips() {
-    vector<pair<Airport*, Airport*>> longestPairs;
+    vector<pair<Airport*, Airport*>> maxTrips;
+    int maxStops = 0;
 
     for (Airport* source : graph.getAirportSet()) {
-        vector<pair<Airport*, int>> distances = graph.bfsLongestDistance(source);
 
-        // Track the maximum distance found for the current source airport
-        int maxDistance = 0;
+        stack<std::pair<Airport*, int>> dfsStack;
+        dfsStack.push({source, 0});
 
-        // Store pairs of airports for the longest trips found
-        vector<pair<Airport*, Airport*>> currentLongestPairs;
+        while (!dfsStack.empty()) {
+            auto currentPair = dfsStack.top();
+            dfsStack.pop();
 
-        for (const auto& distancePair : distances) {
-            int currentDistance = distancePair.second;
+            Airport* current = currentPair.first;
+            int stops = currentPair.second;
 
-            if (currentDistance > maxDistance) {
-                maxDistance = currentDistance;
-                currentLongestPairs.clear();
-                currentLongestPairs.emplace_back(source, distancePair.first);
-            } else if (currentDistance == maxDistance) {
-                currentLongestPairs.emplace_back(source, distancePair.first);
+            if (stops > maxStops) {
+                maxStops = stops;
+                maxTrips.clear();
+                maxTrips.emplace_back(source, current);
+            } else if (stops == maxStops) {
+                maxTrips.emplace_back(source, current);
+            }
+
+            for (Flight* flight : current->getFlights()) {
+                Airport* dest = flight->getDest();
+                if (!dest->isVisited()) {
+                    dest->setVisited(true);
+                    dfsStack.push({dest, stops + 1});
+                }
             }
         }
 
-        // Append currentLongestPairs to longestPairs
-        longestPairs.insert(longestPairs.end(), currentLongestPairs.begin(), currentLongestPairs.end());
+        for (Airport* airport : graph.getAirportSet()) {
+            airport->setVisited(false);
+        }
     }
 
-    return longestPairs;
+    return maxTrips;
 }
 
 //Create a struct to store airport with number of flights
@@ -490,7 +500,7 @@ vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceC
     for (Airport* sourceAirport : sourceAirports) {
         for (Airport* destinationAirport : destinationAirports) {
             if (sourceAirport != destinationAirport) {
-                // Use BFS to find the best flights between the current pair
+
                 unordered_map<Airport*, vector<Flight*>> bestFlightsMap;
                 queue<Airport*> q;
                 q.push(sourceAirport);
