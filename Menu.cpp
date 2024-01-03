@@ -144,6 +144,22 @@ void Menu::getUserAirportCode(string& airportCode) {
     }
 }
 
+void Menu::getUserCityName(string &cityName) {
+    bool validCity = false;
+
+    while (!validCity) {
+        cout << "Enter City Name: ";
+        cin >> cityName;
+        cout << endl << endl;
+
+        validCity = Data::isValidCityName(cityName);
+
+        if (!validCity) {
+            cout << "Invalid Airport Code. Reenter an Airport Code that exists." << endl;
+        }
+    }
+}
+
 
 
 void Menu::processConsultationChoice(int choice) {
@@ -301,10 +317,11 @@ void Menu::processNumOfFlightsChoice(int choice) {
             }
             break;
         case 3:
-            return;
+            break;
 
         default:
             cout << "Invalid choice. Please Enter a valid option." << endl;
+            break;
     }
 }
 
@@ -328,12 +345,11 @@ void Menu::processToCountriesChoice(int choice) {
             cout << "============================" << endl << endl;
             break; }
         case 2: {
-            string city;
-            cout << "Enter the city name: ";
-            cin >> city;
+            string cityName;
+            getUserCityName(cityName);
             cout << "============================" << endl;
-            cout << endl << endl << "Number of countries " << city << " flies to: " <<
-                 Data::getNumCountriesFlyingToCity(city) << endl;
+            cout << endl << endl << "Number of countries " << cityName << " flies to: " <<
+                 Data::getNumCountriesFlyingToCity(cityName) << endl;
             cout << "============================" << endl;
             break;}
         case 3:
@@ -404,7 +420,7 @@ void Menu::displayFlightOptionMenu() {
 
 void Menu::processFlightOptionChoice(int choice) {
     switch (choice) {
-        case 1:
+        case 1: {
             int choice1;
             do {
                 cout << "============================" << endl;
@@ -443,10 +459,11 @@ void Menu::processFlightOptionChoice(int choice) {
                             }
                         }
 
-                        vector<Flight*> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,airportDestCode);
+                        vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,
+                                                                                                  airportDestCode);
 
                         cout << "<   " << Data::getAirportNameByCode(airportSourceCode);
-                        for (Flight* flight : bestFlightOption) {
+                        for (Flight *flight: bestFlightOption) {
                             cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
                                  Data::getAirportNameByCode(flight->getDest()->getAirportInfo().getCode());
                         }
@@ -485,10 +502,11 @@ void Menu::processFlightOptionChoice(int choice) {
                             }
                         }
 
-                        vector<Flight*> bestFlightOption = Data::getBestFlightOption_AirportName(airportSourceName, airportDestName);
+                        vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportName(airportSourceName,
+                                                                                                  airportDestName);
 
                         cout << "<   " << airportSourceName;
-                        for (Flight* flight : bestFlightOption) {
+                        for (Flight *flight: bestFlightOption) {
                             cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
                                  airportDestName;
                         }
@@ -507,16 +525,23 @@ void Menu::processFlightOptionChoice(int choice) {
                 }
 
             } while (choice1 != 3 && choice1 != 2 && choice1 != 1);
+        }
 
-        case 2:
+        case 2: {
+            string cityName;
+            getUserCityName(cityName);
+        }
 
-        case 3:
+        case 3: {
+
+        }
 
         case 4:
             break;
 
         default:
             cout << "Invalid choice. Please Enter a valid option." << endl;
+            break;
     }
 }
 

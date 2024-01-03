@@ -626,3 +626,15 @@ bool Data::isValidAirportName(const string &name) {
     }
     return false;
 }
+
+bool Data::isValidCityName(const string &name) {
+    vector<string> cityNames = graph.getListOfCityNames();
+
+    for (const string& cityName : cityNames) {
+        if (cityName == name) {
+            return true;
+        }
+    }
+
+    return false;
+}

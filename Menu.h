@@ -11,6 +11,7 @@ public:
     static void run();
     static void getUserChoice(int& choice);
     static void getUserAirportCode(string& airportCode);
+    static void getUserCityName(string& cityName);
     static void displayMainMenu();
     static void displayConsultationMenu();
     static void displayFlightOptionMenu();

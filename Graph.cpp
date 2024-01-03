@@ -413,13 +413,14 @@ vector<string> Graph::getListOfAirportNames() const {
     return res;
 }
 
-/*
+
 vector<string> Graph::getListOfCityNames() const {
-    vector<string> cityNames = {};
+    set<string> uniqueCityNames;
 
     for (Airport* airport : airportSet) {
-
+        uniqueCityNames.insert(airport->getAirportInfo().getCity());
     }
-    return ;
+
+    vector<string> cityNames(uniqueCityNames.begin(), uniqueCityNames.end());
+    return cityNames;
 }
-*/

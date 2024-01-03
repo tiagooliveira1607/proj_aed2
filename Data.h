@@ -1,11 +1,8 @@
 #ifndef PROJ_AED2_DATA_H
 #define PROJ_AED2_DATA_H
 
-#include <vector>
-#include <unordered_map>
 #include <fstream>
 #include <sstream>
-#include <set>
 #include "Airline.h"
 #include "Graph.h"
 
@@ -22,7 +19,7 @@ public:
 
     static bool isValidAirportCode(const string& code);
     static bool isValidAirportName(const string& name);
-    static bool isValidCityName(const string& city);
+    static bool isValidCityName(const string& name);
 
     // Methods to populate data structures from CSV files
     static void readAirports(const string& airportsFilePath);
