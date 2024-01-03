@@ -586,15 +586,15 @@ double Data::haversineDistance(double lat1, double lon1, double lat2, double lon
     return distance;
 }
 
-vector<Flight*> Data::getBestFlightOptionToClosestAirports(double lat, double lon) const {
+unordered_map<Airport*,vector<Flight*>> Data::getBestFlightOptionToClosestAirports(double lat, double lon) const {
     auto sourceAirport = graph.getAirportByCoordinates(lat,lon);
 
     vector<Airport*> closestAirportsSource = findClosestAirports(lat,lon);
-    vector<Flight*> bestFlightOptions;
+    unordered_map<Airport*,vector<Flight*>> bestFlightOptions;
 
     for (Airport* destAirport : closestAirportsSource) {
         vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(sourceAirport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
-        bestFlightOptions.insert(bestFlightOptions.end(), currentFlightOption.begin(), currentFlightOption.end());
+        bestFlightOptions[destAirport] = currentFlightOption;
     }
 
     return bestFlightOptions;

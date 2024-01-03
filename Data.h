@@ -76,7 +76,7 @@ public:
     //4.3
     vector<Airport*> findClosestAirports(double lat, double lon) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2) const;
-    vector<Flight*> getBestFlightOptionToClosestAirports(double lat, double lon) const;
+    unordered_map<Airport *, vector<Flight *>> getBestFlightOptionToClosestAirports(double lat, double lon) const;
 };
 
 
