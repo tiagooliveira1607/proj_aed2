@@ -8,6 +8,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <stack>
 #include "Airline.h"
 #include "Graph.h"
 
@@ -52,13 +53,14 @@ public:
     //3.6
     static int numReachableDestinations(const string& startAirport, int layouts, int choice);
 
-    //3.7 -> este ta mal acho eu
+    //3.7
     static vector<pair<Airport*, Airport*>> longestTrips();
 
     //3.8
     static vector<Airport*> topAirportsByFlights(int k);
 
     //3.9
+    static void dfsArticulationPoints(Airport* u, int& time, unordered_map<Airport*, int>& disc, unordered_map<Airport*, int>& low, unordered_map<Airport*, Airport*>& parent, unordered_set<Airport*>& articulationPoints);
     static vector<Airport*> essentialAirports() ;
 
     //4.1
