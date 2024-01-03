@@ -60,6 +60,7 @@ public:
     static vector<Airport*> topAirportsByFlights(int k);
 
     //3.9
+    static void dfsArticulationPoints(Airport* u, int& time, unordered_map<Airport*, int>& disc, unordered_map<Airport*, int>& low, unordered_map<Airport*, Airport*>& parent, unordered_set<Airport*>& articulationPoints);
     static vector<Airport*> essentialAirports() ;
 
     //4.1

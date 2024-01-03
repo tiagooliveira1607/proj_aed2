@@ -346,37 +346,57 @@ vector<Airport*> Data::topAirportsByFlights(int k) {
 }
 
 vector<Airport*> Data::essentialAirports() {
-    vector<Airport*> essentialAirportsList;
+    unordered_map<Airport*, int> disc;    // Discovery time
+    unordered_map<Airport*, int> low;     // Earliest visited vertex reachable from subtree rooted with current vertex
+    unordered_map<Airport*, Airport*> parent;  // To store parent vertices in DFS tree
+    unordered_set<Airport*> articulationPoints;
 
-    for (Airport* currentAirport : graph.getAirportSet()) {
-        // Temporarily mark the current airport as ignored
-        currentAirport->setIgnored(true);
+    int time = 0;
 
-        // Perform a traversal from another airport
-        graph.dfs3_9(); // Or use any appropriate traversal method here
-
-        // Check if all non-ignored airports are reachable
-        bool allNonIgnoredAirportsReachable = true;
-        for (Airport* airport : graph.getAirportSet()) {
-            if (!airport->isIgnored() && !airport->isVisited()) {
-                allNonIgnoredAirportsReachable = false;
-                break;
-            }
-        }
-
-        // If any non-ignored airport becomes unreachable, mark the current airport as essential
-        if (!allNonIgnoredAirportsReachable) {
-            essentialAirportsList.push_back(currentAirport);
-        }
-
-        // Reset the ignored status of the current airport for the next iteration
-        currentAirport->setIgnored(false);
+    // Initialize visited and parent arrays
+    for (Airport* u : graph.getAirportSet()) {
+        disc[u] = 0;
+        low[u] = 0;
+        parent[u] = nullptr;
     }
 
-    return essentialAirportsList;
+    // Call the recursive helper function to find articulation points in DFS tree rooted with vertex 'i'
+    for (Airport* u : graph.getAirportSet()) {
+        if (!disc[u]) {
+            dfsArticulationPoints(u, time, disc, low, parent, articulationPoints);
+        }
+    }
+
+    // Convert unordered_set to vector
+    vector<Airport*> essentialAirports(articulationPoints.begin(), articulationPoints.end());
+
+    return essentialAirports;
 }
 
+void Data::dfsArticulationPoints(Airport* u, int& time, unordered_map<Airport*, int>& disc, unordered_map<Airport*, int>& low, unordered_map<Airport*, Airport*>& parent, unordered_set<Airport*>& articulationPoints){
+    int children = 0;
+    disc[u] = low[u] = ++time;
 
+    for (const Flight* flight : u->getFlights()) {
+        Airport* v = flight->getDest();
+
+        if (!disc[v]) {
+            children++;
+            parent[v] = u;
+            dfsArticulationPoints(v, time, disc, low, parent, articulationPoints);
+
+            low[u] = min(low[u], low[v]);
+
+            if (low[v] >= disc[u] && parent[u] != nullptr)
+                articulationPoints.insert(u);
+        } else if (v != parent[u]) {
+            low[u] = min(low[u], disc[v]);
+        }
+    }
+
+    if (parent[u] == nullptr && children > 1)
+        articulationPoints.insert(u);
+}
 
 vector<Flight *> Data::getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) {
     Airport* sourceAirport = graph.findAirport(sourceCode);
@@ -405,7 +425,6 @@ vector<Flight *> Data::getBestFlightOption_AirportCode(const string& sourceCode,
             }
         }
     }
-    // Retrieve the best flights for the destination airport
     vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
 
 
@@ -455,7 +474,6 @@ vector<Flight *> Data::getBestFlightOption_AirportName(const string& sourceName,
         }
     }
 
-    // Retrieve the best flights for the destination airport
     vector<Flight*> bestFlightsToDestination = bestFlights[destinationAirport];
 
     return bestFlightsToDestination;
@@ -481,7 +499,6 @@ string Data::getAirlineNameByCode(const string &code) {
 vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const{
     vector<vector<Flight*>> bestFlights;
 
-    // Find all airports in the source city
     vector<Airport*> sourceAirports;
     for (Airport* airport : graph.getAirportSet()) {
         if (airport->getAirportInfo().getCity() == sourceCity) {
@@ -489,7 +506,6 @@ vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceC
         }
     }
 
-    // Find all airports in the destination city
     vector<Airport*> destinationAirports;
     for (Airport* airport : graph.getAirportSet()) {
         if (airport->getAirportInfo().getCity() == destinationCity) {
