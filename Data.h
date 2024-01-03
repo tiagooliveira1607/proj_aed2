@@ -193,16 +193,50 @@ public:
     /**
      * @brief Function that identifies what airports are essential to the graph (meaning
      * that if removed some areas of the network starts to be unreachable).
-     * @details Time complexity: O(V + E) V being the number of airports
+     * @details Time complexity: O(V + E), V being the number of airports
      * and E the number of flights.
      * @return A vector of airports that are essential to the network.
      */
     static vector<Airport*> essentialAirports();
 
-    //4.1
-    [[nodiscard]] static vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode) ;
-    static vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName) ;
+    /**
+     * @brief Function that gives the best flights to go from one airport
+     * to another.
+     * @details Time complexity: O(V + E), V being the number of airports and
+     * E the number of flights.
+     * @param sourceCode String representing the code of the source airport.
+     * @param destinationCode String representing the code of the destination airport.
+     * @return Vector with the least amount of flights in order to reach the
+     * destination airport.
+     */
+    [[nodiscard]] static vector<Flight *> getBestFlightOption_AirportCode(const string& sourceCode, const string& destinationCode);
+
+    /**
+     * @brief
+     * @details Time complexity: O(V + E), V being the number of airports
+     * and E the number of flights.
+     * @param sourceName String representing the code of the starting airport.
+     * @param destinationName String representing the code of the destination airport.
+     * @return Vector containing the least amount of flights in order to reach the
+     * destination airport.
+     */
+    static vector<Flight*> getBestFlightOption_AirportName(const string& sourceName, const string& destinationName);
+
+    /**
+     * @brief Auxiliary function that receives an airport code in order to give
+     * the airport name.
+     * @detail Time complexity: O(n)
+     * @param code String representing an airport code.
+     * @return String representing the airport name.
+     */
     static string getAirportNameByCode(const string& code);
+
+    /**
+     * @brief Auxiliary function that receives an airline code in order to give
+     * the airline name.
+     * @param code String representing an airline code.
+     * @return String representing an airline name.
+     */
     static string getAirlineNameByCode(const string& code);
 
 
