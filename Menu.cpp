@@ -107,7 +107,7 @@ void Menu::run() {
                             cout << "Invalid choice. Please enter a valid option." << endl;
                             break;
                     }
-                    cout << "Press Enter to continue...";
+                    cout << "Press Enter to Consultation Menu...";
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cin.get();
                 } while (consultationChoice != 10);
