@@ -26,7 +26,7 @@ public:
     static void processGlobalNum(int choice);
 
 
-    static void processDestChoice(int choice, string airportCode);
+    static void processDestChoice(int choice, const string& airportCode);
     static void processDestChoice(int choice, const string& airportCode, int x);
 };
 

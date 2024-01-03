@@ -134,29 +134,31 @@ pair<int,int> Data::airportFlightStats(const string &airportCode) {
     return {flights.size(), airlines.size()};
 }
 
-unordered_map<string,int> Data::getNumFlightsPerCity() {
-    unordered_map<string,int> flightsPerCity;
+map<string,int> Data::getNumFlightsPerCity() {
+    map<string, int> flightsPerCity;
 
-    for(auto airport : graph.getAirportSet()){
+    for (auto airport : graph.getAirportSet()) {
         auto city = airport->getAirportInfo().getCity();
         const int numFlights = static_cast<int>(airport->getFlights().size());
 
         flightsPerCity[city] += numFlights;
     }
+
     return flightsPerCity;
 }
 
-unordered_map<string,int> Data::getNumFlightsPerAirline() {
-    unordered_map<string,int> flightsPerAirline;
+map<string,int> Data::getNumFlightsPerAirline() {
+    map<string,int> flightsPerAirline;
     for(auto airport : graph.getAirportSet()){
         auto flights = airport->getFlights();
 
         for(auto flight : flights){
-            auto airlineCode = flight->getAirlineCode();
+            auto airlineName = getAirlineNameByCode(flight->getAirlineCode());
 
-            flightsPerAirline[airlineCode]++;
+            flightsPerAirline[airlineName]++;
         }
     }
+
 
     return flightsPerAirline;
 }

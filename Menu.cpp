@@ -348,7 +348,8 @@ void Menu::processToCountriesChoice(int choice) {
             string cityName;
             getUserCityName(cityName);
             cout << "============================" << endl;
-            cout << endl << endl << "Number of countries " << cityName << " flies to: " <<
+
+            cout << "Number of countries " << cityName << " flies to: " <<
                  Data::getNumCountriesFlyingToCity(cityName) << endl;
             cout << "============================" << endl;
             break;}
@@ -368,7 +369,7 @@ void Menu::displayDestOptions() {
     cout << "=============================" << endl << endl;
 }
 
-void Menu::processDestChoice(int choice, string airportCode) {
+void Menu::processDestChoice(int choice, const string& airportCode) {
     switch (choice) {
         case 1:
             cout << "Number of airports available for " << airportCode << ": " << Data::getNumDestFromSource(airportCode, choice) << endl << endl;
