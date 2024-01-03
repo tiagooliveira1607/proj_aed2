@@ -57,7 +57,7 @@ void Menu::getUserAirportName(string &airportName) {
 }
 
 
-void Menu::getUserCoordinates(string& lat, string& lon) {
+void Menu::getUserCoordinates(double& lat, double& lon) {
     cout << "Enter latitude: ";
     cin >> lat;
     cout << endl << "Enter longitude: ";
@@ -116,8 +116,9 @@ void Menu::run() {
                             cout << "Invalid choice. Please enter a valid option." << endl;
                             break;
                     }
+
                     if (consultationChoice != 10) {
-                    cout << "Press Enter to continue...";
+                    cout << "Press Enter to Consultation Menu...";
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cin.get();}
                 } while (consultationChoice != 10);
@@ -492,14 +493,15 @@ void Menu::processFlightOptionChoice(int choice) {
                         cout << "Destination" << endl;
                         getUserAirportCode(airportDestCode);
 
+                        cout << "This is the path you should follow in order to reach your destination!" << endl << endl;
                         vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,airportDestCode);
 
-                        cout << "<   " << Data::getAirportNameByCode(airportSourceCode);
+                        cout << "<" << Data::getAirportNameByCode(airportSourceCode);
                         for (Flight *flight: bestFlightOption) {
                             cout << " using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << " to " <<
                                  Data::getAirportNameByCode(flight->getDest()->getAirportInfo().getCode());
                         }
-                        cout << "   >" << endl << endl;
+                        cout << " >" << endl << endl;
 
                         break;
                     }

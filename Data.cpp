@@ -496,7 +496,8 @@ string Data::getAirlineNameByCode(const string &code) {
 
 
 
-vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) {
+
+vector<vector<Flight*>> Data::getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity){
     vector<vector<Flight*>> bestFlights;
 
     vector<Airport*> sourceAirports;
