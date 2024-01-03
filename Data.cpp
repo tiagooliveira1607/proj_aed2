@@ -135,15 +135,16 @@ pair<int,int> Data::airportFlightStats(const string &airportCode) {
     return {flights.size(), airlines.size()};
 }
 
-unordered_map<string,int> Data::getNumFlightsPerCity() {
-    unordered_map<string,int> flightsPerCity;
+map<string,int> Data::getNumFlightsPerCity() {
+    map<string, int> flightsPerCity;
 
-    for(auto airport : graph.getAirportSet()){
+    for (auto airport : graph.getAirportSet()) {
         auto city = airport->getAirportInfo().getCity();
         const int numFlights = static_cast<int>(airport->getFlights().size());
 
         flightsPerCity[city] += numFlights;
     }
+
     return flightsPerCity;
 }
 

@@ -1,8 +1,10 @@
 #ifndef PROJ_AED2_DATA_H
 #define PROJ_AED2_DATA_H
 
+#include <algorithm>
 #include <vector>
 #include <unordered_map>
+#include <map>
 #include <fstream>
 #include <sstream>
 #include <set>
@@ -33,7 +35,7 @@ public:
     static pair<int,int> airportFlightStats(const string& airportCode) ;
 
     //3.3
-    static unordered_map<string,int> getNumFlightsPerCity();
+    static map<string, int> getNumFlightsPerCity();
     static unordered_map<string,int> getNumFlightsPerAirline();
 
     //3.4
