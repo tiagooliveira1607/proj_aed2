@@ -553,6 +553,7 @@ vector<Airport*> Data::findClosestAirports(double lat, double lon){
     double minDistance = 1000000000;
 
     for (auto airport : graph.getAirportSet()) {
+        if (airport->getAirportInfo().getLatitude() == lat && airport->getAirportInfo().getLongitude() == lon) {continue;}
         double distance = haversineDistance(lat, lon, airport->getAirportInfo().getLatitude(), airport->getAirportInfo().getLongitude());
 
         if (distance < minDistance) {
@@ -586,15 +587,17 @@ double Data::haversineDistance(double lat1, double lon1, double lat2, double lon
     return distance;
 }
 
-vector<Flight*> Data::getBestFlightOptionToClosestAirports(double lat, double lon) {
+
+unordered_map<Airport*,vector<Flight*>> Data::getBestFlightOptionToClosestAirports(double lat, double lon) {
+
     auto sourceAirport = graph.getAirportByCoordinates(lat,lon);
 
     vector<Airport*> closestAirportsSource = findClosestAirports(lat,lon);
-    vector<Flight*> bestFlightOptions;
+    unordered_map<Airport*,vector<Flight*>> bestFlightOptions;
 
     for (Airport* destAirport : closestAirportsSource) {
         vector<Flight*> currentFlightOption = getBestFlightOption_AirportCode(sourceAirport->getAirportInfo().getCode(),destAirport->getAirportInfo().getCode());
-        bestFlightOptions.insert(bestFlightOptions.end(), currentFlightOption.begin(), currentFlightOption.end());
+        bestFlightOptions[destAirport] = currentFlightOption;
     }
 
     return bestFlightOptions;

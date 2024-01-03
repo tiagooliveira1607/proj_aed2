@@ -565,11 +565,15 @@ void Menu::processFlightOptionChoice(int choice) {
             cout << "Source" << endl;
             getUserCoordinates(sourceLat,sourceLon);
 
-            vector<Flight*> bestFlightOption = Data::getBestFlightOptionToClosestAirports(sourceLat,sourceLon);
+            auto bestFlightOption = Data::getBestFlightOptionToClosestAirports(sourceLat,sourceLon);
 
-            cout << "<   " << Data::getAirportByCoordinates(sourceLat,sourceLon)->getAirportInfo().getName();
-            for (Flight* flight : bestFlightOption) {
 
+            for (auto pair : bestFlightOption) {
+                cout << pair.first->getAirportInfo().getName() << ": " << Data::getAirportByCoordinates(sourceLat,sourceLon)->getAirportInfo().getName();
+                for (Flight* flight : pair.second) {
+                    cout << " using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << " to " << flight->getDest()->getAirportInfo().getName();
+                }
+                cout << endl;
             }
             break;
         }
