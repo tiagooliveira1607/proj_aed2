@@ -466,7 +466,7 @@ void Menu::displayFlightOptionMenu() {
     cout << "============================" << endl;
     cout << "1. By Airport Code or Name" << endl;
     cout << "2. By City" << endl;
-    cout << "3. By Geopraphical Coordinates (closest Airport)" << endl;
+    cout << "3. By Geographical Coordinates (closest Airport)" << endl;
     cout << "4. Return" << endl;
     cout << "=============================" << endl << endl;
 }
