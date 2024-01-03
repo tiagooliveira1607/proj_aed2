@@ -482,14 +482,15 @@ void Menu::processFlightOptionChoice(int choice) {
                         cout << "Destination" << endl;
                         getUserAirportCode(airportDestCode);
 
+                        cout << "This is the path you should follow in order to reach your destination!" << endl << endl;
                         vector<Flight *> bestFlightOption = Data::getBestFlightOption_AirportCode(airportSourceCode,airportDestCode);
 
-                        cout << "<   " << Data::getAirportNameByCode(airportSourceCode);
+                        cout << "<" << Data::getAirportNameByCode(airportSourceCode);
                         for (Flight *flight: bestFlightOption) {
-                            cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
+                            cout << " using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << " to " <<
                                  Data::getAirportNameByCode(flight->getDest()->getAirportInfo().getCode());
                         }
-                        cout << "   >" << endl << endl;
+                        cout << " >" << endl << endl;
 
                         break;
                     }
