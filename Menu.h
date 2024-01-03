@@ -13,6 +13,7 @@ public:
     static void getUserAirportCode(string& airportCode);
     static void getUserAirportName(string& airportName);
     static void getUserCityName(string& cityName);
+    static void getUserCoordinates(string& lat, string& lon);
     static void displayMainMenu();
     static void displayConsultationMenu();
     static void displayFlightOptionMenu();

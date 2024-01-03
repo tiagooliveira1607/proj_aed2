@@ -70,8 +70,10 @@ public:
     static string getAirlineNameByCode(const string& code);
 
 
+    //4.2
+    static vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity);
 
-    static vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity) const;
+    //4.3
     vector<Airport*> findClosestAirports(double lat, double lon) const;
     vector<Airport*> findClosestAirports(double lat, double lon,double maxDistance) const;
     double haversineDistance(double lat1, double lon1, double lat2, double lon2) const;
