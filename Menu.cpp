@@ -57,6 +57,15 @@ void Menu::getUserAirportName(string &airportName) {
 }
 
 
+void Menu::getUserCoordinates(double& lat, double& lon) {
+    cout << "Enter latitude: ";
+    cin >> lat;
+    cout << endl << "Enter longitude: ";
+    cin >> lon;
+    cout << endl << endl;
+}
+
+
 
 void Menu::run() {
     int choice = 0;
@@ -107,9 +116,11 @@ void Menu::run() {
                             cout << "Invalid choice. Please enter a valid option." << endl;
                             break;
                     }
+
+                    if (consultationChoice != 10) {
                     cout << "Press Enter to Consultation Menu...";
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                    cin.get();
+                    cin.get();}
                 } while (consultationChoice != 10);
 
                 break;}
@@ -509,8 +520,8 @@ void Menu::processFlightOptionChoice(int choice) {
                                                                                                   airportDestName);
                         cout << "<   " << airportSourceName;
                         for (Flight *flight: bestFlightOption) {
-                            cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  " <<
-                                 airportDestName;
+                            cout << " using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << " to " <<
+                                 airportDestName << " ";
                         }
                         cout << "   >" << endl << endl;
                         break;
@@ -523,6 +534,7 @@ void Menu::processFlightOptionChoice(int choice) {
                 }
 
             } while (choice1 != 3 && choice1 != 2 && choice1 != 1);
+            break;
         }
 
         case 2: {
@@ -537,18 +549,24 @@ void Menu::processFlightOptionChoice(int choice) {
             vector<vector<Flight*>> bestFlightOption = Data::getBestFlightOption_CityName(citySourceName, cityDestName);
 
             for (const auto& flightSet : bestFlightOption) {
+                cout << "<   " << citySourceName;
                 for (Flight* flight : flightSet) {
-                    cout << "<   " << citySourceName;
-                    cout << "    using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << "  to  ";
-                    cout << cityDestName << "   >" << endl;
+                    cout << " using " << Data::getAirlineNameByCode(flight->getAirlineCode()) << " to " <<
+                    cityDestName << " ";
                 }
+                cout << "   >" <<  endl;
             }
             break;
 
         }
 
         case 3: {
-
+            double sourceLat, sourceLon, destLat, destLon;
+            cout << "Source" << endl;
+            getUserCoordinates(sourceLat,sourceLon);
+            cout << "Destination" << endl;
+            getUserCoordinates(destLat, destLon);
+            break;
         }
 
         case 4:
