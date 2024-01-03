@@ -241,14 +241,57 @@ public:
     static string getAirlineNameByCode(const string& code);
 
 
-    //4.2
+    /**
+     * @brief Function that gives the best path to go from one city
+     * to another when the user gives the name of the city.
+     * @details Time complexity: O(N * (V + E)) where N is the number of airports in the graph,
+     * V is the number of vertices, and E is the number of edges in the reachable subgraph
+     * for a single pair of source and destination airports.
+     * @param sourceCity String representing the source city name.
+     * @param destinationCity String representing the destination city name.
+     * @return Return the best path from everything airport in the source city to every
+     * airport in the destination city.
+     */
     static vector<vector<Flight*>> getBestFlightOption_CityName(const string& sourceCity, const string& destinationCity);
 
-    //4.3
-
+    /**
+     * @brief Auxiliary function that gets me the closest airports to a pair of coordinates.
+     * @details Time complexity: O(n).
+     * @param lat Integer that represents the latitude.
+     * @param lon Integer that represents the longitude.
+     * @return Vector that contains the closest airports to a pair of coordinates.
+     */
     static vector<Airport*> findClosestAirports(double lat, double lon);
+
+    /**
+     * @brief Auxiliary that calculates the haversine distance between two points.
+     * @param lat1 Integer that represents the latitude of the first point.
+     * @param lon1 Integer that represents the longitude of the first point.
+     * @param lat2 Integer that represents the latitude of the second point.
+     * @param lon2 Integer that represents the longitude of the seconds point.
+     * @return Integer representing the haversine distance between two points.
+     */
     static double haversineDistance(double lat1, double lon1, double lat2, double lon2);
+
+    /**
+     * @brief Gives the best flight from the source to each of the closest airports.
+     * @details Time complexity: O(V + E) where V is the number of airports
+     * and E the number of flights.
+     * @param lat Integer representing the latitude of the source airport.
+     * @param lon Integer representing the longitude of the source airport.
+     * @return Map where the key is a closest airport and the value is a vector
+     * of the best path to reach that airport.
+     */
     static unordered_map<Airport *, vector<Flight *>> getBestFlightOptionToClosestAirports(double lat, double lon);
+
+    /**
+     * @brief Auxiliary function that gives the airport when you know the coordinates.
+     * @details Time complexity: O().
+     * @param lat Integer representing the latitude.
+     * @param lon Integer representing the longitude.
+     * @return Airport object where the latitude and longitude are the same as the
+     * parameters of the function.
+     */
     static Airport* getAirportByCoordinates(const double& lat, const double& lon);
 };
 
